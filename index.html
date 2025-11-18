@@ -295,7 +295,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table where a&gt;=1 and b = 2;</span><br></pre></td></tr></table></figure>
 
 <p>这个和上面的查询语句只有在a的取值范围上有所差异，但是其实索引的利用情况是一样的，还是只用到了a的索引，很多其他的文档中都会说在符合a&gt;&#x3D;1的二级索引记录中，，b无序，但是在a&#x3D;1的二级索引记录范围内b是有序的，再通过b&#x3D;2条件减少需要扫描的二级索引记录范围，然后得出结论，a,b字段都用到了联合索引，但是我实际用了一遍，发现其实并没有，a的查询范围加不加等号实际效果是一样的。</p>
-<p><img src="/pictures/image-20251112154705437.png" alt="image-20251112154705437"></p>
+<p><img src="/pictures/image-20251112154705437.png" alt="image"></p>
 <p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251112154751111.png" alt="image-20251112154751111"></p>
 <h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> a<span class="operator">&gt;</span><span class="number">1</span> <span class="keyword">and</span> b <span class="operator">=</span><span class="number">2</span>;</span><br></pre></td></tr></table></figure>
 
@@ -810,7 +810,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/11/MySQL/" data-id="cmi451l6l0000xgtibmev7574" data-title="mysql" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/11/MySQL/" data-id="cmi45b5m90001sgtihx170oi0" data-title="mysql" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1740,7 +1740,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" data-id="cmi451l6n0001xgti0uo5a82f" data-title="java-bagu" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" data-id="cmi45b5ma0002sgtib3jbavth" data-title="java-bagu" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1793,7 +1793,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/10/hello-world/" data-id="cmi451l6p0004xgticynm7fnn" data-title="zbc的笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/10/hello-world/" data-id="cmi45b5m50000sgti8yzk4oeh" data-title="zbc的笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
