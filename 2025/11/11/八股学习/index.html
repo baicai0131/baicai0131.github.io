@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>java-bagu | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="HashMap原理HashMap是基于哈希表的数据结构，用于存储键值对，核心：将键的哈希值映射到数组索引的位置，通过数组+链表实现，在Java8后通过前者+红黑树来处理哈希冲突。HashMap使用键的hashCode()计算哈希值，然后使用（n-1）&amp;hash来确定元素在数组中的存储位置。Hash Map的默认初始容量为16，负载因子为0.75，当存储熟练超过16*0.75时会扩容，在原有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java-bagu">
+<meta property="og:url" content="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HashMap原理HashMap是基于哈希表的数据结构，用于存储键值对，核心：将键的哈希值映射到数组索引的位置，通过数组+链表实现，在Java8后通过前者+红黑树来处理哈希冲突。HashMap使用键的hashCode()计算哈希值，然后使用（n-1）&amp;hash来确定元素在数组中的存储位置。Hash Map的默认初始容量为16，负载因子为0.75，当存储熟练超过16*0.75时会扩容，在原有">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="d:\java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0\%E5%9B%BE%E7%89%87\image-20251011092940914.png">
+<meta property="article:published_time" content="2025-11-11T06:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-11T12:26:20.481Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="笔记">
+<meta property="article:tag" content="主题名">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\java%E5%90%8E%E7%AB%AF%E5%AD%A6%E4%B9%A0\%E5%9B%BE%E7%89%87\image-20251011092940914.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-八股学习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="dt-published" datetime="2025-11-11T06:00:00.000Z" itemprop="datePublished">2025-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%88%86%E7%B1%BB%E5%90%8D/">分类名</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      java-bagu
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="HashMap原理"><a href="#HashMap原理" class="headerlink" title="HashMap原理"></a>HashMap原理</h3><p>HashMap是基于哈希表的数据结构，用于存储键值对，核心：将键的哈希值映射到数组索引的位置，通过数组+链表实现，在Java8后通过前者+红黑树来处理哈希冲突。HashMap使用键的hashCode()计算哈希值，然后使用（n-1）&amp;hash来确定元素在数组中的存储位置。Hash Map的默认初始容量为16，负载因子为0.75，当存储熟练超过16*0.75时会扩容，在原有容量的基础上扩容2倍</p>
+<p>Java8后，当链表中存储的元素数量超过8个时，链表会自动转化成红黑树，红黑树是一种平衡二叉树，这样查找的时间复杂度就从O(n)降到了O(logn)。如果树中的元素低于6个了，就自动转会链表，避免不必要的开销</p>
+<ul>
+<li><p>HashMap必须实现hashCode()和equals()方法，前者计算Hash值，确认存储位置，后者比较两个键是否相等</p>
+</li>
+<li><p>1.7版本之前插入链表中时采用头插法但是在多线程情况下，容易成环</p>
+</li>
+</ul>
+<h3 id="Java中的ConcurrentHashMap-1-7-和-1-8之间有什么区别"><a href="#Java中的ConcurrentHashMap-1-7-和-1-8之间有什么区别" class="headerlink" title="Java中的ConcurrentHashMap 1.7 和 1.8之间有什么区别"></a>Java中的ConcurrentHashMap 1.7 和 1.8之间有什么区别</h3><p>TODO:先去学juc了</p>
+<h3 id="为什么JDK1-8对HashMap进行了红黑树的改动"><a href="#为什么JDK1-8对HashMap进行了红黑树的改动" class="headerlink" title="为什么JDK1.8对HashMap进行了红黑树的改动"></a>为什么JDK1.8对HashMap进行了红黑树的改动</h3><p>在JDK1.8之前，Hash Map用链表解决哈希冲突，当哈希冲突较多时，链表中的元素增多，查找，插入和删除的时间复杂度从O(1)退化为O(n)。</p>
+<p>因此在JDK1.8引入红黑树，将链表长度超过一定阈值时链表转换为红黑树，避免性能急剧下降，当链表长度降到6以下时，红黑树重写退化为链表，保持简单搞笑，红黑树是一种平衡二叉树，时间复杂度为O(log n)</p>
+<h3 id="Java中的序列化和反序列化是什么"><a href="#Java中的序列化和反序列化是什么" class="headerlink" title="Java中的序列化和反序列化是什么"></a>Java中的序列化和反序列化是什么</h3><h4>序列化</h4>
+
+<p>将对象转化为字节流的过程，这样对象可以通过网络传输，持久化存储或者缓存，Java提供了java.io.Serializable接口来支持序列化，只要类implements这个接口就可以实现序列化</p>
+<h4>反序列化</h4>
+
+<p>上述中得到的字节流重写转换成对象的过程，从存储中读取数据后重新创建对象</p>
+<h4>其他</h4>
+
+<p>应用场景：网络传输，远程调用，持久化存储，分布式数据系统中数据交换<br>Java序列化关键类和接口：ObjectOutputStream用于序列化，ObjectInputStream用于反序列化，类必须实现Serializable接口才能被序列化。<br>transient关键字：用于标记实体类中不需要序列化的字段<br>serialVersionUID：为了确保序列化和反序列化一致，用于标记Serializable类<br>序列化性能问题：Java的默认序列化机制比较慢，对于大规模分布式系统，可能会选择更高效的序列化框架，比如Protobuf,Kryo（这俩是什么？）</p>
+<h3 id="Java中的集合类"><a href="#Java中的集合类" class="headerlink" title="Java中的集合类"></a>Java中的集合类</h3><p>分为Collection接口和Map接口</p>
+<p>前者存储对象，后者存储键值对</p>
+<p>Collection接口下分List、Set、Queue接口，</p>
+<h5 id="List接口："><a href="#List接口：" class="headerlink" title="List接口："></a>List接口：</h5><p>ArrayList：基于动态数组，查询速度块，插入删除慢</p>
+<p>LinkedList：基于双向链表，插入，删除块，查询速度慢</p>
+<p>Vector：线程安全的动态数组，类似于ArrayList，但是开销大</p>
+<h5 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h5><p>HashSet：基于Hash表，元素无序，不允许重复</p>
+<p>LinkedHashSet：基于链表和哈希表，维护插入顺序，不允许重复</p>
+<p>TreeSet：基于红黑树，元素有序，不允许重复。</p>
+<h5 id="Queue接口"><a href="#Queue接口" class="headerlink" title="Queue接口"></a>Queue接口</h5><p>PriorityQueue：基于优先级堆，元素按照自然顺序或指定比较器排序</p>
+<p>LinkedList：作为队列使用，支持先进先出操作</p>
+<h5 id="Map接口"><a href="#Map接口" class="headerlink" title="Map接口"></a>Map接口</h5><p>HashMap：基于哈希表，键值对无序，不允许键重复</p>
+<p>LinkedHashMap：基于链表和哈希表，维护插入顺序，不允许键重复</p>
+<p>TreeMap：基于红黑树，键值对有序，不允许键重复</p>
+<p>Hashtable：线程安全的哈希表，不允许键或值为null</p>
+<h3 id="MySQL索引的最左前缀匹配原则是什么"><a href="#MySQL索引的最左前缀匹配原则是什么" class="headerlink" title="MySQL索引的最左前缀匹配原则是什么"></a>MySQL索引的最左前缀匹配原则是什么</h3><p>使用联合索引时，查询条件必须从索引的最左侧开始匹配，如果一个联合索引包含多个列，查询条件必须包含第一个列的条件，然后是第二个</p>
+<p>底层：联合索引在B+树种的排列方式遵循从左到右的顺序，MySQL在查询时会优先使用最左列作为匹配依据，</p>
+<p>怎么建立联合索引：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建联合索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_name_age <span class="keyword">ON</span> users(last_name, first_name, age);</span><br></pre></td></tr></table></figure>
+
+<p>在查询时必须要从索引的最左列开始才是有效使用索引的查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ✅ 使用索引（完整使用）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;Smith&#x27;</span> <span class="keyword">AND</span> first_name <span class="operator">=</span> <span class="string">&#x27;John&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ✅ 使用索引（部分使用）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;Smith&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ✅ 使用索引（范围查询）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;Smith&#x27;</span> <span class="keyword">AND</span> age <span class="operator">&gt;</span> <span class="number">25</span>;</span><br></pre></td></tr></table></figure>
+
+<h5 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h5><p>索引下推：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">where a = 1 , c = 4;</span><br></pre></td></tr></table></figure>
+
+<p>mysql5.6版本后的一个优化：索引下推，在查询到a&#x3D;1的数据后，会利用c的条件来过滤，但是在之前只能查询到a&#x3D;1的数据。</p>
+<p><strong>索引下推</strong>允许在存储引擎层执行WHERE条件的部分过滤，而不是将所有数据返回到Server层再进行过滤。</p>
+<h5 id="注意查询范围"><a href="#注意查询范围" class="headerlink" title="注意查询范围"></a>注意查询范围</h5><p>联合索引的顺序：</p>
+<p>比如在联合索引(a,b,c)，在B+树种的排序是先按照a的值排序，a的值相同按照b的值排序，b的值相同在按照c的值排序。</p>
+<p>如果遇到范围查询（&gt;,&lt;），就会停止匹配，停止匹配是指a可以用上联合索引，但是b,c不行。因为范围查询后得到的b,c的数据是无序的，比如a&#x3D;1和a&#x3D;2数据之间的b,c是无序的，无法利用索引查询</p>
+<p>但是如果是&gt;&#x3D;,&lt;&#x3D;,between登，不会停止匹配，这些查询中包含一个等值判断，可以直接定位到某个数据，然后往后扫描即可</p>
+<p>但是在mysql8之后不需要最左匹配也能使用联合索引了</p>
+<p>mysql8之后引入了Skip Scan Range Access Method，利用了范围扫描来代替全表扫描的发生。</p>
+<p>具体原理：</p>
+<ul>
+<li>先统计索引最左字段的基数即唯一值</li>
+<li>然后将最左索引字段的值并入查询条件原来的查询语句：where b &#x3D; ?构造where a &#x3D; ? and b &#x3D; ?这样的条件进行查询</li>
+</ul>
+<p>这个改动的局限性：</p>
+<p>最左条件的基数要很低，因为要列举最左条件的值来构建查询</p>
+<p>如果最左条件的基值很多，那就差不多是对一个全表进行查询了。</p>
+<h3 id="脏读，不可重复读，-幻读"><a href="#脏读，不可重复读，-幻读" class="headerlink" title="脏读，不可重复读， 幻读"></a>脏读，不可重复读， 幻读</h3><p>脏读；一个事务读到了另一个事务<strong>未提交</strong>的事务</p>
+<p>不可重复读：在同一个事务中，读取同一个数据两次，由于其他事务的提交导致读取结果不同</p>
+<p>幻读：同一事务中，执行相同的查询操作，返回的结果集由于其他事务的插入而发生变化</p>
+<h4 id="隔离级别和几种读的关系："><a href="#隔离级别和几种读的关系：" class="headerlink" title="隔离级别和几种读的关系："></a>隔离级别和几种读的关系：</h4><p>读未提交：允许脏读</p>
+<p>读已提交：防止脏读，会出现不可重复读</p>
+<p>可重复读：防止脏读和不可重复读，会出现幻读</p>
+<p>串行化：防止三种问题，但是开销大</p>
+<p>幻读针对的是数据总量的增加或减少，不可重复读是指对同一条数据，在事务执行期间内部字段发生了变化</p>
+<h3 id="Mysql中的存储引擎"><a href="#Mysql中的存储引擎" class="headerlink" title="Mysql中的存储引擎"></a>Mysql中的存储引擎</h3><p>主要的存储引擎包括：</p>
+<ul>
+<li>InnoDB：执行事务，行级锁，外键，提供高并发性能，适用于高负载的OLTP应用，数据以聚集索引的方式存储，提高检索效率</li>
+<li>MyISAM：不支持事务和外键，使用表级锁，适合读取多，更新少的场景 ，具有较高的读性能和较快的表级锁定。</li>
+<li>MEMEORY：数据存储在内存中，速度快，但数据在服务器重启后丢失，适用于临时数据存储和快速缓存</li>
+<li>NDB：支持高可用性和数据分布，适用大规模分布式应用，提供行级锁和自动分区</li>
+<li>ARCHIVE：用于存储大量历史数据，支持高效的插入和压缩，不支持索引，适合日志数据存储。</li>
+</ul>
+<h3 id="MySQL的覆盖索引是什么"><a href="#MySQL的覆盖索引是什么" class="headerlink" title="MySQL的覆盖索引是什么"></a>MySQL的覆盖索引是什么</h3><p>指的是二级索引中包含了查询所需的所有字段，从而使查询可以仅通过访问二级索引而不需要访问实际的表数据（主键索引）</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>减少I&#x2F;O操作：因为查询可以直接从索引中获取所有需要的数据，避免了访问实际表的数据页，减少了I&#x2F;O操作。</li>
+<li>提高查询速度：索引比表数据更紧凑，因此从索引中读取数据比从表中读取要快</li>
+<li>减少内存占用：只要读取索引页而不是表数据页，可以减少内存占用。</li>
+</ul>
+<p>普通索引的查询流程是：</p>
+<p>查询—&gt;索引查找—&gt;获得主键—&gt;回表查询数据行—&gt;返回结果</p>
+<p>覆盖索引查询流程：</p>
+<p>查询—&gt;索引查找—&gt;直接从索引返回数据—&gt;返回结果</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> employees (</span><br><span class="line">    emp_id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    first_name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    last_name <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    hire_date <span class="type">DATE</span>,</span><br><span class="line">    department_id <span class="type">INT</span>,</span><br><span class="line">    INDEX idx_name_hiredate (last_name, first_name, hire_date)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这里是覆盖索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> last_name, first_name, hire_date </span><br><span class="line"><span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;鸭&#x27;</span> <span class="keyword">AND</span> first_name <span class="operator">=</span> <span class="string">&#x27;面试&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里不能利用覆盖索引,在建立的索引中不包含department_id</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> last_name, first_name, hire_date, department_id </span><br><span class="line"><span class="keyword">FROM</span> employees </span><br><span class="line"><span class="keyword">WHERE</span> last_name <span class="operator">=</span> <span class="string">&#x27;鸭&#x27;</span> <span class="keyword">AND</span> first_name <span class="operator">=</span> <span class="string">&#x27;面试&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="MySQL的索引类型有哪些"><a href="#MySQL的索引类型有哪些" class="headerlink" title="MySQL的索引类型有哪些"></a>MySQL的索引类型有哪些</h3><h4 id="从数据结构来看"><a href="#从数据结构来看" class="headerlink" title="从数据结构来看"></a>从数据结构来看</h4><ul>
+<li>B+树索引：通过树形结构存储数据，适用于范围查询和精确查询，支持有序数据的快速查找，排序和聚合操作。MySQL的默认索引类型，常用于InnoDB和MyISAM引擎</li>
+<li>哈希索引：基于哈希表的结构，适用于等值查询，不支持范围查询，不存储数据的顺序，常用在Memory引擎</li>
+<li>倒排索引：用于全文搜索，将全文分词，通过存储此和文档的映射，支持模糊匹配和关键词搜索，使用于大文本字段</li>
+<li>R-树索引：专为多为空间数据设计，适用于空间查询，常用于存储和查询地理信息系统中的空间数据</li>
+</ul>
+<h4 id="从常见的基于InnoDB-B-树索引角度来看"><a href="#从常见的基于InnoDB-B-树索引角度来看" class="headerlink" title="从常见的基于InnoDB B+树索引角度来看"></a>从常见的基于InnoDB B+树索引角度来看</h4><ul>
+<li>聚簇索引：主键索引是一种聚簇索引，基于主键排序存储，聚簇：索引的叶子节点存储完整数据行数据</li>
+<li>非聚簇索引：InnoDB中非主键索引的索引，非聚簇：索引的叶子节点仅保存索引字段和主键的值，如果想要查询完整的数据行中的数据，要在从聚簇索引中的主键索引在通过主键查询，一个表可以有多个非聚簇索引。</li>
+</ul>
+<h4 id="从索引性质的角度"><a href="#从索引性质的角度" class="headerlink" title="从索引性质的角度"></a>从索引性质的角度</h4><ul>
+<li>普通索引</li>
+<li>主键索引</li>
+<li>联合索引：多列组成的索引，适用于多列的查询条件，能提高包含多个条件的查询的性能</li>
+<li>唯一索引</li>
+<li>全文索引</li>
+<li>空间索引</li>
+</ul>
+<p>我们通常将mysql数据库分为三层</p>
+<ol>
+<li><p>Server层</p>
+<ul>
+<li>连接管理</li>
+<li>解析器：语法分析（识别select等关键字），词法分析（验证SQL语法正确性），生成解析树</li>
+<li>优化器：选择最优执行计划，决定如何使用索引，表连接顺序等</li>
+<li>执行器：按照执行计划调用存储引擎接口执行查询</li>
+</ul>
+</li>
+<li><p>存储引擎层：负责数据的存储和检索，提供事务支持等</p>
+</li>
+<li><p>连接层：管理客户端连接，身份认证，安全验证</p>
+<ul>
+<li>连接处理器：处理客户端连接请求</li>
+<li>线程池：管理连接线程</li>
+<li>身份认证：用户名密码权限验证</li>
+<li>SSL加密：提高安全的数据传输</li>
+</ul>
+</li>
+</ol>
+<p>什么是回表？</p>
+<p>MySQL中常用的索引是b+树这种聚簇索引，叶子节点中保持完整的数据，二级索引则是非聚簇索引，叶子节点中存储的是索引列的值和主键值。当我们用二级索引查询时，如果查询的字段不在二级索引的键中，就需要二级索引找到主键在去聚簇索引中查询，这个过程叫做回表。</p>
+<p>细化从server，存储引擎层来看：</p>
+<p>Server解析SQL—&gt;调用存储引擎层–&gt;存储引擎层查找—&gt;回表(Server层再次调用存储引擎层接口)—&gt;存储引擎层在聚簇索引中查找—-&gt;server层返回结果</p>
+<p>所以索引下推技术可以通过减少回表查询来提高查询效率，运行MySQL在用索引查找数据时将部分查询条件下推到存储引擎层，减少回表。</p>
+<h3 id="聚簇索引和非聚簇索引"><a href="#聚簇索引和非聚簇索引" class="headerlink" title="聚簇索引和非聚簇索引"></a>聚簇索引和非聚簇索引</h3><p>InnoDB中的主键索引就是聚簇索引</p>
+<p>主键索引：</p>
+<p>非叶子节点：存储主键页号</p>
+<p>叶子：存储完整数据</p>
+<p>叶子节点之间有双向链表连接，便于范围查询</p>
+<p>叶子节点内部有页目录，内部记录是单链表链接，通过页目录二分再遍历链表即可得到对应记录</p>
+<p>B+树只能帮助快速定位到页，而不是记录</p>
+<p>所以不要所有查询都用select * 本来直接利用二级索引能得到的数据就不用回表查询了</p>
+<h3 id="MySQL中使用索引一定有效吗？如何排查索引效果"><a href="#MySQL中使用索引一定有效吗？如何排查索引效果" class="headerlink" title="MySQL中使用索引一定有效吗？如何排查索引效果"></a>MySQL中使用索引一定有效吗？如何排查索引效果</h3><p>索引不一定有效</p>
+<p>当查询的条件中不包含索引列时不会有效</p>
+<p>查询条件复杂且不匹配索引顺序时不会有效（比如不符合联合索引要求的最左匹配）</p>
+<p>或者索引的基数比较低</p>
+<p>对于一些小表，扫描全表的开销要低于利用索引</p>
+<p>如何排查索引？</p>
+<p>只要在查询语句前面+上explain关键字就可以。对查询出来的信息主要观察</p>
+<ul>
+<li>type：访问类型，index,range表示使用了索引，all表示没使用索引</li>
+<li>key：显示查询使用的索引，没有索引显示null</li>
+<li>row：显示查询扫描的行数</li>
+</ul>
+<p>type的类型：</p>
+<ul>
+<li>eq_ref：唯一索引扫描</li>
+<li>ref：非唯一索引扫描</li>
+<li>index：全索引扫描</li>
+<li>ALL：全表扫描</li>
+</ul>
+<p>索引失效的例子：</p>
+<ol>
+<li>使用了联合索引但是不符合最左前缀</li>
+<li>索引中使用了运算</li>
+<li>索引上使用了函数</li>
+<li>like的随意使用</li>
+<li>or的随意使用：当查询条件中有一项是索引但是另外一项不是索引的时候。</li>
+<li>随意的字段类型使用：将varchar类型的数据和其他类似int类型的数据进行比较，就会设计隐式转换，还有隐式字符编码转换</li>
+<li>不同的参数也会导致索引失效</li>
+<li>表中两个不同字段进行比较</li>
+<li>使用了order by</li>
+</ol>
+<h4 id="扩展-1"><a href="#扩展-1" class="headerlink" title="扩展"></a>扩展</h4><p>InnoDB基于聚簇索引来构建数据，所以查询时一定会用索引。</p>
+<p>那为什么还会有全表扫描这个说法？</p>
+<p>答：InnoDB的索引结构是B+树，它的叶子节点之间通过链表相连，<strong>所以只要找到主键索引最左边的叶子节点，然后往右扫描就能得到这张表的所有记录，这就叫做全表扫描。</strong></p>
+<p>什么叫用上索引？</p>
+<ul>
+<li>利用主键索引来快速查找</li>
+<li>利用二级索引快速查找</li>
+<li>全扫描二级索引查找</li>
+</ul>
+<p>我们说的全表扫描&#x3D;&#x3D;用了索引，等价于没用上索引。</p>
+<p>为什么不用主键索引而用二级索引来进行全扫瞄，因为二级索引中包含的信息更少，能够减少开销，所以当索引能够覆盖返回值的时候一般都会选择二级索引来查找，不能覆盖则采用主键全扫描的方式</p>
+<h3 id="RabbitMQ怎么实现延迟队列"><a href="#RabbitMQ怎么实现延迟队列" class="headerlink" title="RabbitMQ怎么实现延迟队列"></a>RabbitMQ怎么实现延迟队列</h3><p>RabbitMQ不支持延迟消息，可以哦通过两个特性TTL（消息存活时间）和DLX（死信交换器）</p>
+<p>不给原队列设置消费者，当消息在原队列中达到TTL后，会转到死信交换器，消费者从死信交换器中消费消息，从而实现消息的延迟处理。</p>
+<ol>
+<li>消息先到达普通队列</li>
+<li>TTL到了，传递给死信交换器，进而传给延迟队列</li>
+<li>等待消费者消费</li>
+</ol>
+<p>延迟消息插件</p>
+<p>TTL+DLX时序问题：因为队列是FIFO的，所以就会出现这样的问题，第一个消息处理的事件比较长，那后面的消息就都需要等待它处理完毕后才能处理。最好创建为相同处理时间的消息分别创建队列。</p>
+<p>延迟消息插件的核心原理：原本的实现是消息会先传递到一个普通消息队列中，这里传递到mensia中，等待TTL截止</p>
+<p>什么是mensia？</p>
+<p>Mnesia 是 Erlang&#x2F;OTP 平台中的一个分布式、软实时数据库管理系统。它不仅是数据库，更是一个具备强大分布式特性的数据存储解决方案</p>
+<p>利用插件实现延迟队列</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RabbitMQDelayedExchange</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DELAYED_EXCHANGE</span> <span class="operator">=</span> <span class="string">&quot;delayed_exchange&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DELAYED_QUEUE</span> <span class="operator">=</span> <span class="string">&quot;delayed_queue&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ConnectionFactory</span> <span class="variable">factory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConnectionFactory</span>();</span><br><span class="line">        factory.setHost(<span class="string">&quot;localhost&quot;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> (<span class="type">Connection</span> <span class="variable">connection</span> <span class="operator">=</span> factory.newConnection();</span><br><span class="line">             <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> connection.createChannel()) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 声明延迟交换机</span></span><br><span class="line">            Map&lt;String, Object&gt; argsMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">            argsMap.put(<span class="string">&quot;x-delayed-type&quot;</span>, BuiltinExchangeType.DIRECT.getType());</span><br><span class="line"></span><br><span class="line">            channel.exchangeDeclare(DELAYED_EXCHANGE, <span class="string">&quot;x-delayed-message&quot;</span>, <span class="literal">true</span>, <span class="literal">false</span>, argsMap);</span><br><span class="line">            channel.queueDeclare(DELAYED_QUEUE, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">null</span>);</span><br><span class="line">            channel.queueBind(DELAYED_QUEUE, DELAYED_EXCHANGE, <span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">&quot;Delayed exchange and queue declared.&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 发送带有延迟时间的消息</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="string">&quot;This is a delayed message&quot;</span>;</span><br><span class="line">            Map&lt;String, Object&gt; headers = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">            headers.put(<span class="string">&quot;x-delay&quot;</span>, <span class="number">10000</span>);  <span class="comment">// 延迟 10 秒</span></span><br><span class="line"></span><br><span class="line">            AMQP.<span class="type">BasicProperties</span> <span class="variable">properties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AMQP</span>.BasicProperties.Builder()</span><br><span class="line">                    .headers(headers)</span><br><span class="line">                    .build();</span><br><span class="line"></span><br><span class="line">            channel.basicPublish(DELAYED_EXCHANGE, <span class="string">&quot;&quot;</span>, properties, message.getBytes(<span class="string">&quot;UTF-8&quot;</span>));</span><br><span class="line">            System.out.println(<span class="string">&quot;Message sent with delay: &quot;</span> + message);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="索引是否越多越好"><a href="#索引是否越多越好" class="headerlink" title="索引是否越多越好"></a>索引是否越多越好</h3><p>不是</p>
+<ul>
+<li>时间上：数据库的每次增删改查索引也要跟着更新，如果索引很多会导致更新的时间成本增加，此外，MsSQL的查询优化器也要在查询前评判哪个索引的查询效率更高，索引太多也会增加时间成本。</li>
+<li>空间上：每次建立二级索引都要建立一颗B+树，也会增加空间的开销。</li>
+</ul>
+<p>字段列中有大量重复数据的不要建立索引</p>
+<p>长字段不要建立索引</p>
+<p>更新频率高的不要建立</p>
+<p>可以考虑联合索引</p>
+<h3 id="为什么RocketMQ不选择用Zookeeper作为注册中心而是自己实现NameServer来实现"><a href="#为什么RocketMQ不选择用Zookeeper作为注册中心而是自己实现NameServer来实现" class="headerlink" title="为什么RocketMQ不选择用Zookeeper作为注册中心而是自己实现NameServer来实现"></a>为什么RocketMQ不选择用Zookeeper作为注册中心而是自己实现NameServer来实现</h3><p>在谈论这个问题前要先了解分布式系统设计的<strong>CAP理论</strong></p>
+<p>所谓CAP理论，C：一致性，A：可用性，P：分区容错性，在设计分布式系统中，很难同时满足三个性能，只能追求其中两个，而且分区容错性是必须的要求，所以一般都会选择CP或者AP</p>
+<p>基于AP理论延申出了BASE理论，为了弥补AP在<strong>一致性</strong>上的不足，强调系统可以牺牲强一致性来实现最终一致性来保证高可用，许多NoSQL和互联网应用遵循BASE原则。</p>
+<p>而之所以RocketMQ选择自己实现NameServer是为了满足消息队列在高可用(A)、低延迟、低性能方面的需求，底层倾向于AP理论的设计模式，但是Zookeeper强调的是强一致性，CP理论，这和RocketMQ的设计原则相悖，所以采用自己实现NameServer。</p>
+<h5 id="NameServer的核心工作机制"><a href="#NameServer的核心工作机制" class="headerlink" title="NameServer的核心工作机制"></a>NameServer的核心工作机制</h5><p>轻量，高效，</p>
+<p>高可用：RocketMQ的NameServer是无状态的，多个NameServer实例间对等，通过DNS或者VIP进行负载均衡天然具有高可用性</p>
+<ul>
+<li>路由注册与心跳</li>
+<li>路由剔除：NameServer会定期扫描以及注册的Broker，如果一个Broker长期未上报心跳，判定失效，从路由表中剔除。</li>
+<li>路由发现</li>
+</ul>
+<p>综上：</p>
+<h4 id="RocketMQ不使用Zookeeper的原因："><a href="#RocketMQ不使用Zookeeper的原因：" class="headerlink" title="RocketMQ不使用Zookeeper的原因："></a>RocketMQ不使用Zookeeper的原因：</h4><ul>
+<li>轻量级和高性能需求：MQ需要一个高性能，低延迟的注册中心，Zookeeper的强一致性和复杂的管理机制带来了一定的开销，NameServer是一个简单的、轻量级的服务发现和路由管理组件，适合消息队列的需求。</li>
+<li>动态拓扑和高扩展性：NameServer采用无状态设计，可以随时增加或者减少节点，且NameServer节点间不需要进行同步，减少了集群复杂度，适应动态的Broker集群环境，便于拓展和维护。</li>
+<li>弱一致性要求：MQ的服务发现和路由信息允许短时间内的不一致NameServer值提供基础服务发现功能，不用维护Zookeeper的强一致性算法。</li>
+<li>独立性，可靠性：减少对外部组件的依赖，以便在复杂场景中保证系统的稳定性和可靠性，NameServer独立运作，不需要外部分布式协调系统支持，降低系统耦合度。</li>
+</ul>
+<h3 id="MySQL中B-树查询数据的全过程"><a href="#MySQL中B-树查询数据的全过程" class="headerlink" title="MySQL中B+树查询数据的全过程"></a>MySQL中B+树查询数据的全过程</h3><ol>
+<li>从根节点开始查找，利用二分查找判断走哪颗子树，以到达包含对应数据的叶子节点</li>
+<li>叶子节点中存储的数据不止一行，有16kb大小</li>
+<li>叶子中的数据以组划分，但是有<strong>目录结构</strong>，可以采用二分查找定位</li>
+<li>找到对应组后，可以遍历链表来查找对应的数据行</li>
+</ol>
+<p>不用担心遍历链表花费时间过长，InnoDB规定，每个叶子节点中的第一组只有一条数据，中间4-8条，最后一组1-8条</p>
+<h3 id="消息什么时候进入死信交换机"><a href="#消息什么时候进入死信交换机" class="headerlink" title="消息什么时候进入死信交换机"></a>消息什么时候进入死信交换机</h3><ul>
+<li>拒绝消息：当消费者明确拒绝消息，且不再要求重新投递时</li>
+<li>消息过期：RabbitMQ明确规定了消息的TTL，如果到达了它的存活时间还没被消费就进入死信交换机</li>
+<li>队列达到最大长度：如果给队列设置了最大的长度，当队列存储信息到达上限，那么最早的那个消息就会进入死信交换机中。</li>
+</ul>
+<h3 id="MySQL中为什么选择使用B-树作为索引结构"><a href="#MySQL中为什么选择使用B-树作为索引结构" class="headerlink" title="MySQL中为什么选择使用B+树作为索引结构"></a>MySQL中为什么选择使用B+树作为索引结构</h3><ol>
+<li>高效的查找性能：B+树是自平衡的，每个叶子节点到根节点的距离是相同的，节点变化时，会进行响应的分裂和合并保证树的平衡，但又会有一定的冗余节点，删除的时候树结构的变化小，更高效。</li>
+<li>树的高度不会增长过快，使得查询磁盘的I&#x2F;O次数减少：b+树不像红黑树数据越多树越快变高，非叶子节点仅保存主键或索引值和页面指针，是的每页能容纳更多的记录，内存中能放更多索引，更容易命中缓存，减少查询磁盘的I&#x2F;O次数。</li>
+<li>查询范围能力强：叶子节点中存放的是一页的数据，每页中的数据也按组排放，利用二分+链表遍历可以快速实现范围查找。</li>
+</ol>
+<h4 id="B和B"><a href="#B和B" class="headerlink" title="B和B+"></a>B和B+</h4><p>B树每个节点都存放完整的数据，B+的非叶子节点仅存放key和指针，B+树可以在内存中存放更多索引页，减少磁盘查询次数。</p>
+<p>B+树的叶子组成链表，便于区间查找，B树只能按层遍历查找</p>
+<p>B+树查询时间更平均，稳定，都需要从根节点扫描到叶子节点，但是B树不一定，可能中间的非叶子节点就返回数据了。</p>
+<p>下图是B-link树</p>
+<p><img src="D:\java后端学习\图片\image-20251011092940914.png" alt="image-20251011092940914"></p>
+<h3 id="RabbitMQ中无法被路由的消息会怎么处理"><a href="#RabbitMQ中无法被路由的消息会怎么处理" class="headerlink" title="RabbitMQ中无法被路由的消息会怎么处理"></a>RabbitMQ中无法被路由的消息会怎么处理</h3><ul>
+<li>丢弃：通常会将没有被路由的消息直接丢弃</li>
+<li>备用交换机：为交换机准备一个备用交换机，在把消息放到备用交换机相关联的队列中，再进行相应处理</li>
+<li>消息回退：使用mandaotory的参数时，把消息回退给生产者，让生产者自行处理</li>
+</ul>
+<h3 id="MySQL三层B-树能存多少数据"><a href="#MySQL三层B-树能存多少数据" class="headerlink" title="MySQL三层B+树能存多少数据"></a>MySQL三层B+树能存多少数据</h3><p>MySQL的InnoDB存储引擎中，B+树的默认数据页大小为16KB</p>
+<p>假设每条数据大小1KB</p>
+<p>叶子：16KB&#x2F;1KB&#x3D;16条</p>
+<p>中间层：16*1024&#x2F;6+8&#x3D;1170  指针6字节，索引键8字节</p>
+<p>1170 * 117- * 16 ≈2000万条记录</p>
+<h3 id="SQL语句在MySQL中的执行过程"><a href="#SQL语句在MySQL中的执行过程" class="headerlink" title="SQL语句在MySQL中的执行过程"></a>SQL语句在MySQL中的执行过程</h3><ol>
+<li>在Server层中，连接器先进行权限校验。</li>
+<li>分析器对SQL语句进行词法分析和语法分析，构成解析树。</li>
+<li>优化器选择合适的索引和表的连接顺序，选择最优执行方案。</li>
+<li>执行器调用引擎层查询数据，返回结果集给客户端。</li>
+</ol>
+<h3 id="MySQL如何实现事务"><a href="#MySQL如何实现事务" class="headerlink" title="MySQL如何实现事务"></a>MySQL如何实现事务</h3><p>MySQL实现事务主要通过：锁，RedoLog，UndoLog ,以及MVCC来实现</p>
+<p>前情提要：我们知道事务的隔离级别分为：读未提交，读已提交，可重复读，和串行化</p>
+<p>其中InnoDB中默认的隔离级别是可重复读。</p>
+<h4 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h4><p>但是这些事务隔离是怎么实现的呢？</p>
+<p>从MVCC的角度来看，MVCC主要实现的是读已提交和可重复读事务隔离级别的实现。</p>
+<p>MVCC是什么？是事务隔离级别的无锁的实现方式，底层类似于乐观锁。直观表现即为使读不堵塞写，写不堵塞读。</p>
+<p>怎么实现的？</p>
+<p>在InnoDB中，每行数据有几个隐藏字段：</p>
+<ul>
+<li><p>DB_TRX_ID：记录最后修改这行数据的事务ID</p>
+</li>
+<li><p>DB_ROLL_PTR：回滚指针，指向该行数据在undo_log中的上一个版本</p>
+</li>
+<li><p>DB_ROW_ID：行ID，当无主键时充当聚簇索引</p>
+</li>
+</ul>
+<p>在InnoDB中，<strong>每次快照读都会形成一个一致性视图</strong>：Read View 其中包含以下字段信息：当前事务ID，未提交事务ID，未开始事务ID。</p>
+<p>已知，事务的ID是递增的</p>
+<p>在undo_log中记录着新数据和过往旧数据形成的版本链，每条数据包含上诉提到的隐藏字段。</p>
+<p>在读未提交的事务隔离中：</p>
+<ul>
+<li>DB_TRX_ID&lt;min_trx_id（未提交事务中的最小ID）时，说明这行数据在Read View 形成前提交，可见</li>
+<li>DB_TRX_ID&gt;&#x3D;max_trx_id（未提交事务中的最小ID）时，说明这行数据在之后提交，不可见</li>
+<li>other 情况，要判断当前的DB_TRX_ID是否在Read View 中的未提交列表中，如果在，不可见，不在，则可见</li>
+</ul>
+<p>当当前版本不可见时，就要利用Roll_PTR回溯到上一个版本去，知道找到可见数据。</p>
+<p>可重复读和读已提交有一点差别，就是只有在第一次查询的时候会形成Read View ，确保第一次和之后查询的数据一致性。</p>
+<h4 id="MySQL中的锁"><a href="#MySQL中的锁" class="headerlink" title="MySQL中的锁"></a>MySQL中的锁</h4><ol>
+<li>行级锁：针对特定行加锁，不同事务访问不同行，提高并发能力</li>
+<li>表级锁：针对整张表加锁，使用小型表</li>
+<li>共享锁：允许一起读，共享锁释放才能获得排他锁</li>
+<li>排他锁：只允许一个事务读写</li>
+<li>间隙锁：针对索引中的两个记录之间的间隙加锁，防止间隙间的操作，导致幻读</li>
+<li>临建锁：行锁+间隙锁，针对某一行和其之后的间隙加锁</li>
+</ol>
+<h4 id="Redo-Log-和-Undo-Log"><a href="#Redo-Log-和-Undo-Log" class="headerlink" title="Redo_Log 和 Undo_Log"></a>Redo_Log 和 Undo_Log</h4><p>重做日志和回滚日志，重做日志记录对数据库数据的修改，当MySQL崩溃时，用Redo_Log实现对数据的重写，回滚日志，当事务失败时，利用回滚日志使数据库回退到事务刚开始的状态</p>
+<h3 id="TODO：MySqL事务的二阶段提交是什么"><a href="#TODO：MySqL事务的二阶段提交是什么" class="headerlink" title="TODO：MySqL事务的二阶段提交是什么"></a>TODO：MySqL事务的二阶段提交是什么</h3><h3 id="MySQL中长事务会导致哪些问题"><a href="#MySQL中长事务会导致哪些问题" class="headerlink" title="MySQL中长事务会导致哪些问题"></a>MySQL中长事务会导致哪些问题</h3><ol>
+<li>长时间占用锁，阻塞资源<ul>
+<li>长事务长时间持有锁，其他事务在获取相同锁时发生阻塞，降低了系统的并发能力</li>
+<li>业务线程也因为长时间的数据库请求而阻塞</li>
+</ul>
+</li>
+<li>死锁：长事务更容易产生死锁，多个事务可能都在等待对方释放锁</li>
+<li>主从延迟：主库长时间执行，然后传输给从库，从库又要重放好久，期间可能有很长的时间数据不同步</li>
+<li>回滚导致时间浪费：如果长事务执行了很长时间，中间抛错，就要回滚从头再来</li>
+</ol>
+<h4 id="怎么解决长事务问题"><a href="#怎么解决长事务问题" class="headerlink" title="怎么解决长事务问题"></a>怎么解决长事务问题</h4><p>拆分和删除转插入</p>
+<ul>
+<li>拆分：如果一个长事务可以转换成若干个短事务，如果没有索引就添加一个主键索引项</li>
+<li>删除转插入：如果一个表中大部分数据要被删除，就把不要删除的数据插入到一张新表中，然后rename，就可以大幅度提高效率了。</li>
+</ul>
+<h3 id="为什么需要消息队列"><a href="#为什么需要消息队列" class="headerlink" title="为什么需要消息队列"></a>为什么需要消息队列</h3><p>在分布式系统中，由于业务量过大，我们就需要消息队列来实现解耦服务之间的关系，控制资源合理合时的使用以及缓冲流量洪峰等，它通常用来实现：异步处理，服务解耦，流量控制。</p>
+<h4 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a>应用场景：</h4><ul>
+<li>订单系统：电商系统中，订单的创建、支付、发货等步骤可以通过消息队列进行异步处理和解耦</li>
+<li>日志处理：使用消息队列将日志从应用系统传输到日志处理系统，实现实时分析和监控</li>
+<li>任务调度：在批量任务处理，任务调度系统中，通过消息队列将任务分发给多个工作节点，进行并行处理</li>
+<li>数据同步：在数据同步系统中，消息队列可以用于将变更的数据异步同步到不同的存储系统或服务。</li>
+</ul>
+<h3 id="消息队列模型"><a href="#消息队列模型" class="headerlink" title="消息队列模型"></a>消息队列模型</h3><ol>
+<li>队列模型（点对点模型）<ul>
+<li>消息从生产者发送到队列，每条消息只能被一个消费者消费一次，消费之后，消息在队列中被删除</li>
+<li>适用于任务处理类场景，一个任务只要一个处理者执行</li>
+</ul>
+</li>
+<li>发布&#x2F;订阅模型<ul>
+<li>在发布&#x2F;订阅模型中，生产者将消息发布到某个主题，所有订阅了该主题的消费者都会接收到该消息</li>
+<li>每个订阅者都会接收到相同的消息，适用于广播哦通知，实时推送等场景</li>
+</ul>
+</li>
+</ol>
+<h3 id="MySQL默认隔离级别"><a href="#MySQL默认隔离级别" class="headerlink" title="MySQL默认隔离级别"></a>MySQL默认隔离级别</h3><p>MySQL默认的隔离级别是可重复读</p>
+<p>原因是为了兼容早期binlog的statement格式问题，如果是使用读已提交、读未提交等隔离级别，使用statement格式的binlog会导致主从数据库不一致问题。</p>
+<h4 id="什么是STATEMENT格式"><a href="#什么是STATEMENT格式" class="headerlink" title="什么是STATEMENT格式"></a>什么是STATEMENT格式</h4><p>在这个格式中，binlog记录的不是实际的数据行，而是记录SQL语句</p>
+<h5 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h5><ul>
+<li>主从数据库不一致：如果SQL语句中包含了未确定性函数，比如UUID()或者RAND()、就会导致主从数据库不一致，如果使用AUTO_INCREMENT，它的分配顺序可能因时机和负载不同而在主从上产生差异。</li>
+<li>对系统环境要求严格：主从数据库的设置必须高度一致，必须使用相同的字符集，必须使用相同的排序结构，MySQL版本必须相同，表结构必须完全相同。</li>
+<li>行锁范围更大，影响并发性能：当update delete语句带有where语句时，在master上执行过的全表扫描需要在slave上面再执行一遍影响效率。但是在ROW格式中Slave不需要执行全表扫描的操作，它明确直到要修改哪一行。</li>
+</ul>
+<p>现在MySQL中默认使用ROW格式。</p>
+<h3 id="Java策略模式"><a href="#Java策略模式" class="headerlink" title="Java策略模式"></a>Java策略模式</h3><p>行为型设计模式，定义一系列算法，每个算法封装，可以相互替换，让算法独立于使用它的客户端而变化。</p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>算法封装：算法的实现和使用算法的代码分离，封装提高代码的灵活性和可扩展性</li>
+<li>动态替换：可以在允许时选择和替换算法</li>
+<li>遵循开闭原则：新增策略无需修改现有代码</li>
+</ul>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li>多种算法可以互换：</li>
+<li>避免条件语句</li>
+<li>与上下文独立</li>
+</ul>
+<h4 id="策略模式组成"><a href="#策略模式组成" class="headerlink" title="策略模式组成"></a>策略模式组成</h4><ul>
+<li>策略接口：定义算法的通用接口</li>
+<li>具体策略：实现具体的算法</li>
+<li>上下文类：持有策略接口的引用，调用具体策略的方法</li>
+</ul>
+<h3 id="悲观锁和乐观锁"><a href="#悲观锁和乐观锁" class="headerlink" title="悲观锁和乐观锁"></a>悲观锁和乐观锁</h3><p>使用select …… for update 是实现悲观锁的常见方式，在读取数据的同时对数据进行锁定，防止其他事务修改。</p>
+<h3 id="MySQL发生死锁怎么解决"><a href="#MySQL发生死锁怎么解决" class="headerlink" title="MySQL发生死锁怎么解决"></a>MySQL发生死锁怎么解决</h3><ul>
+<li>自动检测和回滚<ul>
+<li>自带死锁检测机制，检测到死锁，自动回滚其中一个持有资源最少的事务</li>
+<li>设置锁的等待超时参数，获取锁的时间超过了阈值，就释放锁进行回滚。</li>
+</ul>
+</li>
+<li>手动kill发生死锁的语句：通过命令，快速找到被阻塞的事务及其线程ID，手动kill它，及时释放资源。</li>
+</ul>
+<h3 id="Count-Count-1-Count-字段"><a href="#Count-Count-1-Count-字段" class="headerlink" title="Count(*),Count(1),Count(字段)"></a>Count(*),Count(1),Count(字段)</h3><p>count(*)和count(1)的效率差不多都查询所有行的数量包括null值，count(字段名)，查询指定字段不为null的行数，对指定的字段进行计数，只会统计字段值不为null的行</p>
+<p>在MyISAM中，由于只有表锁，会维护行数，所以单纯的查询count(*)时（不需要条件过滤）会很快。</p>
+<h3 id="什么是观察者模式，用在什么场景"><a href="#什么是观察者模式，用在什么场景" class="headerlink" title="什么是观察者模式，用在什么场景"></a>什么是观察者模式，用在什么场景</h3><p>行为型设计模式，用于定义对象一种一对多的依赖关系，一个对象状态发生变化时，所有依赖它的对象都会接收到通知并且自动更新</p>
+<p>目的：将观察者和被观察者代码解耦。</p>
+<h4 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h4><ul>
+<li>松耦合：观察者和被观察者之间是松耦合的，便于扩展和维护</li>
+<li>动态订阅：可以动态添加或者移除观察者，灵活性高</li>
+<li>单向通信：被观察者通知观察者</li>
+</ul>
+<h4 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h4><ul>
+<li>事件驱动系统</li>
+<li>系统间通信</li>
+<li>分布式系统</li>
+</ul>
+<h4 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h4><ul>
+<li>Subject：被观察者，状态发生变化时通知所有注册的观察者</li>
+<li>Observer：观察者，接收来之被观察者的更新哦通知，并进行响应的操作</li>
+<li>ConcreteSubject：具体被观察者，</li>
+<li>ConcreteObserver：具体观察者</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 观察者接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Observer</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(String message)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 被观察者接口</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Subject</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addObserver</span><span class="params">(Observer observer)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">removeObserver</span><span class="params">(Observer observer)</span>;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体被观察者</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteSubject</span> <span class="keyword">implements</span> <span class="title class_">Subject</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Observer&gt; observers = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> String state;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addObserver</span><span class="params">(Observer observer)</span> &#123;</span><br><span class="line">        observers.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">removeObserver</span><span class="params">(Observer observer)</span> &#123;</span><br><span class="line">        observers.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Observer observer : observers) &#123;</span><br><span class="line">            observer.update(state);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.state = state;</span><br><span class="line">        notifyObservers();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 具体观察者</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title class_">Observer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ConcreteObserver</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(String message)</span> &#123;</span><br><span class="line">        System.out.println(name + <span class="string">&quot; received update: &quot;</span> + message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 客户端</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ConcreteSubject</span> <span class="variable">subject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteSubject</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">Observer</span> <span class="variable">observer1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>(<span class="string">&quot;Observer1&quot;</span>);</span><br><span class="line">        <span class="type">Observer</span> <span class="variable">observer2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>(<span class="string">&quot;Observer2&quot;</span>);</span><br><span class="line"></span><br><span class="line">        subject.addObserver(observer1);</span><br><span class="line">        subject.addObserver(observer2);</span><br><span class="line"></span><br><span class="line">        subject.setState(<span class="string">&quot;New State 1&quot;</span>);</span><br><span class="line">        subject.setState(<span class="string">&quot;New State 2&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="MySQL中如何进行SQL调优"><a href="#MySQL中如何进行SQL调优" class="headerlink" title="MySQL中如何进行SQL调优"></a>MySQL中如何进行SQL调优</h3><p>平时进行SQL调优，主要通过观察慢SQL，利用explain分析查询语句的执行计划，识别性能瓶颈，优化查询语句。</p>
+<ol>
+<li>合理设计索引，利用联合索引进行覆盖索引的优化，避免回表的发生，减少一次查询和随机I&#x2F;O</li>
+<li>避免Select * ，只查询必要的字段</li>
+<li>避免在SQL中进行函数计算等操作，使得无法命中索引</li>
+<li>避免使用%LIKE(%)，导致全表扫描</li>
+<li>注意联合索引满足最左匹配原则</li>
+<li>不要对无索引字段进行排序操作</li>
+<li>连表查询需要注意不同字段的字符集是否一致，否则也会导致全表扫描</li>
+</ol>
+<p>利用缓存来优化，变化少，访问频繁的数据设置到缓存中，减轻数据库压力，提升查询效率等</p>
+<p>慢SQL：MySQL自带的日志记录，默认关闭，通过set global slow_query_log &#x3D; ‘ON’开启</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show variables like &#x27;%slow_query_log&#x27;查询慢日志是否开启，以及存储路径</span><br><span class="line">set global long_query_time = 3设置慢SQL的阈值，SQL执行的事件操作3秒就会被记录到慢日志中</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Spring启动过程"><a href="#Spring启动过程" class="headerlink" title="Spring启动过程"></a>Spring启动过程</h3><ol>
+<li><p>读取XML配置文件以及配置类，配置数据库连接，事务管理，AOP等</p>
+</li>
+<li><p>根据配置文件实例化ApplicationContext，容器启动阶段实例化BeanFactory，加载BeanDefinitions</p>
+</li>
+<li><p>解析BeanDefinitions获取Bean元数据</p>
+</li>
+<li><p>根据BeanDefinitions中的元数据实例化Bean对象，放入容器管理</p>
+</li>
+<li><p>Spring进行依赖注入（DI），将Bean之间的依赖关系进行注入，包括构造函数注入，属性注入等</p>
+</li>
+<li><p>处理Bean生命周期初始化方法：</p>
+<ul>
+<li>Spring调用Bean初始化方法，对Bean进行初始化</li>
+<li>如果Bean实现了InitializingBean接口，Spring会调用其afterPropertiesSet方法</li>
+</ul>
+</li>
+<li><p>处理BeanPostProcessors：容器定义了很多BeanPostProcessor,处理其中的子当以逻辑，例如postProcessBeforeinitialization会在Bean初始化前调用，在Bean<strong>实例化之后</strong>、<strong>初始化前后</strong>被调用。</p>
+<p>AOP代理也在这个阶段生成</p>
+</li>
+<li><p>发布事件：SPring可能会在启动张中发布一些事件，比如容器启动事件</p>
+</li>
+<li><p>完成启动：所有的Bean初始化完毕，依赖注入完成，AOP配置生效等都准备就绪，Spring容器启动完成。</p>
+</li>
+</ol>
+<h4 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h4><p>核心思想：对象的依赖关系不由对象自己创建，而是由外部容器（Spring）在允许时动态注入。</p>
+<ul>
+<li>构造函数注入</li>
+<li>Setter方法注入</li>
+<li>字段注入@Autowired</li>
+</ul>
+<h5 id="依赖注入的详细过程"><a href="#依赖注入的详细过程" class="headerlink" title="依赖注入的详细过程"></a>依赖注入的详细过程</h5><ol>
+<li>Bean实例化：Spring通过反射调用构造函数创建Bean实例，但是创建后的Bean中的所有依赖字段都是null或者默认值</li>
+<li>依赖解析和注入：Spirng扫描Bean的所有字段，方法和构造函数，找到需要的注入点后，针对每个注入点要确定Spring需要什么类型的Bean</li>
+<li>查找Bean：根据类型从容器中查找匹配的Bean</li>
+<li>处理特殊注解</li>
+</ol>
+<h3 id="Redis集群的实现原理"><a href="#Redis集群的实现原理" class="headerlink" title="Redis集群的实现原理"></a>Redis集群的实现原理</h3><p>Redis由多个Redis实例组成，每个实例存储部分的数据，采用哈希槽机制来分配数据，键空间被划分为了16384个槽，每个Redis实例负责一定范围内的哈希槽，数据的key经过哈希函数计算后对16384取余定位到对应的节点。</p>
+<h3 id="Spring中用到的设计模式"><a href="#Spring中用到的设计模式" class="headerlink" title="Spring中用到的设计模式"></a>Spring中用到的设计模式</h3><p>工程模式：BeanFacotry，整个Spring IOC就是一个工厂</p>
+<p>模板方法：JdbcTemplate,RestTemplate</p>
+<p>代理模型：AOP就是代理模式</p>
+<p>单例模式：默认Bean都是单例</p>
+<p>责任链模式：SpringMVC中的拦截器，多个拦截器串联起来就是责任链</p>
+<p>观察者模式：在Spring中的监听器实现</p>
+<p>适配器模式：在Spring MVC中提到的hadlerAdapter就是适配器</p>
+<h3 id="Redis集群会出现脑裂问题吗"><a href="#Redis集群会出现脑裂问题吗" class="headerlink" title="Redis集群会出现脑裂问题吗"></a>Redis集群会出现脑裂问题吗</h3><p>Redis集群存在脑裂问题，特别是在网络分区的情况下，可能会导致同一个集群内出现多个主节点，导致数据不一致</p>
+<h4 id="什么是网络分区"><a href="#什么是网络分区" class="headerlink" title="什么是网络分区"></a>什么是网络分区</h4><p>网络分区也叫网络分裂，在分布式集群中，节点之间由于网络连接故障，导致原本互通的集群被分割成多个无法相互通信的子网络。</p>
+<h4 id="什么是脑裂？"><a href="#什么是脑裂？" class="headerlink" title="什么是脑裂？"></a>什么是脑裂？</h4><p>就是一个集群中有多个节点认为自己是唯一的主节点导致多个主节点同时提供写服务，引起数据不一致。</p>
+<p>导致脑裂发生的主要原因就是网络分区。</p>
+<p>以主从,哨兵集群为例，主节点和哨兵，从节点发生了分区，哨兵联系不上主节点，选出了新的主节点，这样Redis中就出现了多个主节点。这个时候写入数据就会不知道写到哪个台上，导致数据不一致。</p>
+<h4 id="怎么避免"><a href="#怎么避免" class="headerlink" title="怎么避免"></a>怎么避免</h4><p>设置参数：</p>
+<ul>
+<li>min-slaves-to-write：设置主节点在至少几个从节点的时候才能写入数据</li>
+<li>min-slaves-max-lag：设置从节点的最大延迟，如果从节点的延迟超过了这个value，就不写入</li>
+</ul>
+<p>但是上面的措施依旧不能避免脑裂问题，因为如果哨兵发现了主节点下线，然后在选举期间主节点重新恢复，但是选举无法中断，就会导致多个节点的出现。</p>
+<p>为了避免出现脑裂问题一般选择从节点数量为奇数</p>
+<h3 id="Spring有哪几种事务传播行为"><a href="#Spring有哪几种事务传播行为" class="headerlink" title="Spring有哪几种事务传播行为"></a>Spring有哪几种事务传播行为</h3><h4 id="什么是事务传播行为"><a href="#什么是事务传播行为" class="headerlink" title="什么是事务传播行为"></a>什么是事务传播行为</h4><p>指的是一个事务方法被另外一个事务方法调用后，这个事务方法如何进行。比如Service A 中的一个事务方法调用Service B里面的一个事务方法</p>
+<p>解决方案：</p>
+<ul>
+<li>融入事务：直接去掉Service B中的begin 和 commit 融入到Service A的事务中，B的错误会引起A的回滚</li>
+<li>挂起事务：如果不想B的错误引起A的回滚，可以开启两个连接，一个执行A，一个执行B，互不影响，执行B的时候A挂起新起连接执行B，B执行完了再唤醒A执行</li>
+<li>嵌套事务：MySQL中可以通过给B加savepoint和rollback模拟嵌套事务，把B设置成伪事务。</li>
+</ul>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li>ProPagation_Required（默认）：如果当前存在事务使用当前事务，没有事务另起一个新事务。</li>
+<li>ProPagation_Supports：支持当前事务，不存在以非事务方式执行。</li>
+<li>ProPagation_Mandatory：支持当前事务，不存在抛异常。</li>
+<li>ProPagation_Requires_New：创建新事务，如果存在当前事务，挂起当前事务。</li>
+<li>ProPagation_Not_Supported：不支持当前事务，始终以非事务方式执行。这个一般应用在读取配置信息等不需要事务控制的数据查询中，提高效率，避免不必要开销。</li>
+<li>ProPagation_Never：不支持当前事务，如果当前存在事务，抛异常</li>
+<li>ProPagation_Nested：如果当前事务存在，则在嵌套事务中执行，内层事务以来外层事务，如果外层失败，回滚内层，内层失败不影响外层。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(propagation = Propagation.REQUIRES_NEW)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">methodA</span><span class="params">()</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> InventoryService inventoryService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.REQUIRED)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">placeOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="comment">// 保存订单</span></span><br><span class="line">        saveOrder(order);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 调用库存减少操作，使用同一个事务</span></span><br><span class="line">        inventoryService.reduceInventory(order);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">saveOrder</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="comment">// 保存订单逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">InventoryService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional(propagation = Propagation.REQUIRED)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reduceInventory</span><span class="params">(Order order)</span> &#123;</span><br><span class="line">        <span class="comment">// 减少库存的逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的OrderService和InventoryService使用了REQUIRED，则placeOrder和reduceInventory一个抛异常，整个事务回滚。</p>
+<p>生产中常用配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># RDB配置</span><br><span class="line">save 900 1      # 15分钟内至少1个key变化</span><br><span class="line">save 300 10     # 5分钟内至少10个key变化</span><br><span class="line">save 60 10000   # 1分钟内至少10000个key变化</span><br><span class="line">dbfilename dump.rdb  # RDB文件名</span><br><span class="line">dir ./               # RDB文件保存路径</span><br><span class="line">stop-writes-on-bgsave-error yes  # bgsave出错时停止接收写请求</span><br><span class="line">rdbcompression yes               # 开启RDB文件压缩</span><br><span class="line">rdbchecksum yes                  # 开启RDB文件校验</span><br><span class="line"></span><br><span class="line"># AOF配置</span><br><span class="line">appendonly yes                   # 开启AOF持久化</span><br><span class="line">appendfilename &quot;appendonly.aof&quot;  # AOF文件名</span><br><span class="line">appendfsync everysec             # 推荐使用每秒同步策略</span><br><span class="line">auto-aof-rewrite-percentage 100  # 当前AOF文件比上次重写后大小增长100%时触发重写</span><br><span class="line">auto-aof-rewrite-min-size 64mb   # AOF文件体积至少达到64MB时才可能触发重写</span><br><span class="line"></span><br><span class="line">#开启混合持久化</span><br><span class="line">aof-use-reb-preamble yes</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h3><p>RDB和AOF</p>
+<h3 id="Redis分布式锁"><a href="#Redis分布式锁" class="headerlink" title="Redis分布式锁"></a>Redis分布式锁</h3><p>Lua 脚本确实是 Redis 实现分布式锁<strong>原子操作</strong>，是<strong>安全释放锁</strong>的关键基础。它解决了在分布式环境下释放锁时可能出现的<strong>竞态条件</strong>问题。</p>
+<p>Redis中利用set ex nx 命令 + Lua脚本组合使用实现分布式锁，确保多个客户端不会获得同一资源所的同时，也保证了安全解锁和意外情况下锁的自动释放。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">加锁：set Lock_key uniqueValue EX expire_time NX</span><br><span class="line">解锁：使用Lua脚本，先get key 的 value 判断是否是自己加的锁，是 del</span><br></pre></td></tr></table></figure>
+
+<p>锁的过期机制：EX expire_time 单位秒</p>
+<p>uniqueValue：防止锁被别的客户端释放了</p>
+<p>当主节点上锁成功但是突然宕机，由于主从延迟，从节点还没有同步到这个锁，但是这个时候别的从节点成为了新的主节点，会导致两个客户端抢锁，产生数据不一致。为了解决，推出红锁。</p>
+<p>红锁使用再集群中，通常部署多个redis示例，客户端在大多数实例上请求锁，一定时间内获得成功表示加锁成功，使用RedLock提高容错性，即使部分Redis实例故障，仍然可以获得锁。</p>
+<h5 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h5><p>要注意开始加锁时获取当前时间T1，都加锁后再获取时间T2，计算T2-T1，判断是否高于了锁的有效时间TTL。</p>
+<ol>
+<li>在每个Redis实例上加锁，在有限时间内，完成所有实例的加锁</li>
+<li>如果大多数实例加锁成功，表示加锁成功</li>
+<li>否则，客户端讲释放所有已经加锁了的实例</li>
+</ol>
+<h4 id="Redission看门狗"><a href="#Redission看门狗" class="headerlink" title="Redission看门狗"></a>Redission看门狗</h4><p>用来避免Redis中的锁在超时后业务逻辑没执行完毕，锁自动释放，通过定期刷新锁的TTL来实现自动续期。</p>
+<h5 id="主要原理"><a href="#主要原理" class="headerlink" title="主要原理"></a>主要原理</h5><ol>
+<li><strong>定时刷新</strong>：如果当前分布式锁未设置过期时间，Redission基于Netty时间轮启动一个定时任务，定期向Redis发送命令更新锁的过期时间，默认没10s发送一次，每次续期30s。</li>
+<li><strong>释放锁</strong>：客户端主动释放锁，Redission会取消看门狗，客户宕机，定时任务无法执行，超时时间到了，锁自动释放。</li>
+</ol>
+<h3 id="Lua-脚本如何保证原子性"><a href="#Lua-脚本如何保证原子性" class="headerlink" title="Lua 脚本如何保证原子性"></a>Lua 脚本如何保证原子性</h3><p>Redis 采用<strong>单线程</strong>处理命令的模式，这意味着任何在 Redis 上执行的命令都是天然的原子操作。Lua 脚本的魔力在于，当你在 Redis 中执行一个 Lua 脚本时，<strong>Redis 会保证这个脚本以原子方式执行</strong>：脚本中的所有命令会作为一个整体连续执行，期间不会被其他客户端发送的命令插入或打断。</p>
+<p>在释放分布式锁时，最安全的做法需要两步：</p>
+<ol>
+<li><strong>验证身份</strong>：检查当前锁的值（value）是否与当前客户端设置的唯一标识（例如 UUID）匹配。</li>
+<li><strong>删除锁</strong>：如果匹配成功，则删除这个键（Key），释放锁。</li>
+</ol>
+<p>如果这两步操作不是原子性的，就可能出现问题。</p>
+<h3 id="释放锁时的竞态条件问题"><a href="#释放锁时的竞态条件问题" class="headerlink" title="释放锁时的竞态条件问题"></a>释放锁时的竞态条件问题</h3><p>如果不用 Lua 脚本，而是分两步先 <code>GET</code>再 <code>DEL</code>，可能会发生如下问题：</p>
+<table>
+<thead>
+<tr>
+<th>时间点</th>
+<th>客户端 A (持有锁，准备释放)</th>
+<th>Redis 中的锁 (key: ‘mylock’)</th>
+<th>客户端 B (尝试获取锁)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T1</td>
+<td><strong>执行 <code>GET mylock</code></strong> 查询到 value 为 ‘A-UUID’</td>
+<td>value &#x3D; ‘A-UUID’ (未过期)</td>
+<td>尝试 <code>SET mylock B-UUID NX PX 30000</code><strong>失败</strong></td>
+</tr>
+<tr>
+<td>T2</td>
+<td><strong>CPU 时间片用完或发生 FGC，线程暂停</strong> ⏸️</td>
+<td>value &#x3D; ‘A-UUID’ (已过期**)</td>
+<td></td>
+</tr>
+<tr>
+<td>T3</td>
+<td></td>
+<td><strong>锁自动过期，被 Redis 删除</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>T4</td>
+<td></td>
+<td></td>
+<td><strong>尝试 <code>SET mylock B-UUID NX PX 30000</code>成功</strong> ✅</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>线程恢复，<strong>执行 <code>DEL mylock</code></strong> 🗑️</td>
+<td>value &#x3D; ‘B-UUID’</td>
+<td></td>
+</tr>
+<tr>
+<td>T6</td>
+<td></td>
+<td><strong>锁被意外删除！</strong> ❌</td>
+<td>开始操作共享资源，但锁已消失，安全性被破坏</td>
+</tr>
+</tbody></table>
+<p>这个过程中，客户端 A 在 T5 执行的 <code>DEL</code>命令<strong>误删了客户端 B 刚刚设置的锁</strong>，破坏了锁的互斥性。</p>
+<h4 id="📜-Lua-脚本的解决方案"><a href="#📜-Lua-脚本的解决方案" class="headerlink" title="📜 Lua 脚本的解决方案"></a>📜 Lua 脚本的解决方案</h4><p>使用 Lua 脚本可以将 <strong>“比较标识”</strong> 和 <strong>“删除锁”</strong> 这两个操作封装成一个原子操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if redis.call(&quot;GET&quot;, KEYS[1]) == ARGV[1] then</span><br><span class="line">    return redis.call(&quot;DEL&quot;, KEYS[1])</span><br><span class="line">else</span><br><span class="line">    return 0</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**<code>KEYS[1]</code>**：是锁的键（Key），例如 <code>seckill:lock:123</code>。</li>
+<li>**<code>ARGV[1]</code>**：是客户端唯一生成的标识（Value），例如一个 UUID。</li>
+</ul>
+<p>这个脚本的执行逻辑是：</p>
+<ul>
+<li>只有当 Redis 中存储的锁标识与客户端传入的标识<strong>完全一致</strong>时，才会执行删除操作。</li>
+<li>整个脚本的执行是一个<strong>不可中断</strong>的原子操作，从而彻底避免了上述竞态条件。</li>
+</ul>
+<h4 id="📊-关键操作与原子性保障"><a href="#📊-关键操作与原子性保障" class="headerlink" title="📊 关键操作与原子性保障"></a>📊 关键操作与原子性保障</h4><p>下表总结了 Redis 分布式锁中关键操作及其原子性保障机制：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>核心命令&#x2F;方式</th>
+<th>原子性保障</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>加锁</strong></td>
+<td><code>SET key unique_value NX PX timeout</code></td>
+<td><strong>原子</strong></td>
+<td>单条命令原生原子性，同时完成“判断是否存在”、“设置值”和“设置超时”三个操作。</td>
+</tr>
+<tr>
+<td><strong>释放锁（不安全）</strong></td>
+<td><code>GET key</code>+ <code>DEL key</code></td>
+<td><strong>非原子</strong></td>
+<td>两条命令之间存在间隙，可能发生竞态条件。</td>
+</tr>
+<tr>
+<td><strong>释放锁（安全）</strong></td>
+<td><strong>Lua 脚本</strong>（比较 value + 删除）</td>
+<td><strong>原子</strong></td>
+<td>Redis 单线程原子执行整个脚本，是安全释放锁的<strong>基石</strong>。</td>
+</tr>
+<tr>
+<td><strong>锁续期</strong></td>
+<td>Lua 脚本（比较 value + 延长超时）</td>
+<td><strong>原子</strong></td>
+<td>同样需要借助 Lua 脚本保证“检查持有者”和“设置新超时”的原子性，避免为其他客户端的锁续期。</td>
+</tr>
+</tbody></table>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>Lua 脚本是 Redis 分布式锁实现<strong>原子性操作</strong>（尤其是安全释放锁和复杂操作如锁续期）的<strong>关键技术</strong>。它利用 Redis 单线程执行模型的特性，将多个命令组合成一个不可分割的整体，有效避免了竞态条件。</p>
+<p>虽然简单的加锁操作可以用单条 <code>SET</code>命令实现原子性，但<strong>但凡涉及“先检查、再操作”的复合逻辑</strong>，Lua 脚本几乎是保证其原子性的唯一选择。因此，在实现一个健壮、可靠的 Redis 分布式锁时，Lua 脚本不是可选项，而是<strong>必需品</strong>。</p>
+<p>在实际开发中，通常推荐直接使用成熟的客户端库（如 Java 的 <strong>Redisson</strong>），它们已经内置了这些经过充分测试的 Lua 脚本和完整的分布式锁逻辑，避免了重复造轮子和可能出现的错误。</p>
+<h3 id="Spring的启动流程"><a href="#Spring的启动流程" class="headerlink" title="Spring的启动流程"></a>Spring的启动流程</h3><ol>
+<li>启动main（）方法，通过SpringApplication.run()引导应用启动</li>
+<li>创建SpringApplication对象，推断应用类型，设置初始化器，设置启动监听器，确认主应用类</li>
+<li>准备环境，加载配置文件，系统环境变量，以及命令行参数</li>
+<li>创建并刷新ApplicationContext，创建应用上下文，加载配置类，和自动配置类，注册Bean并执行依赖注入等初始化操作</li>
+<li>在刷新上下文时启动嵌入式Web服务器：SpringBoot自动启动嵌入式Web容器（Tomcat），注册相关的Servlet和Filter</li>
+<li>发布应用已启动时间，对应监听stated事件逻辑会被触发</li>
+<li>执行CommandLineRunner和ApplicationRunner，在应用启动完成后，执行了CommandLinerRunner和ApplicationRunner接口的初始化逻辑。它们通常用于在应用程序启动时执行一些初始化任务，例如加载数据、设置资源等。</li>
+<li>发布ready事件，应用启动完成，触发ApplicationReadyEvent，应用进入运行状态，处理业务请求或任务。</li>
+</ol>
+<h3 id="Redis为什么这么快"><a href="#Redis为什么这么快" class="headerlink" title="Redis为什么这么快"></a>Redis为什么这么快</h3><ul>
+<li>Redis将数据存储在内存中，提供快速的读写速度，相比传统的磁盘数据库，内存访问速度快得多</li>
+<li>Redis使用单线程事件驱动模型结合I&#x2F;O多路复用，避免了多线程上下文切换和竞争条件，提高了并发处理效率</li>
+<li>Redis提供多种高效的数据结构，字符串，哈希，列表，集合</li>
+</ul>
+<h3 id="为什么Redis设计为单线程，6-0后为什么改为多线程"><a href="#为什么Redis设计为单线程，6-0后为什么改为多线程" class="headerlink" title="为什么Redis设计为单线程，6.0后为什么改为多线程"></a>为什么Redis设计为单线程，6.0后为什么改为多线程</h3><h4 id="设置单线程的原因"><a href="#设置单线程的原因" class="headerlink" title="设置单线程的原因"></a>设置单线程的原因</h4><ul>
+<li>Redis的操作是基于内存的，大多数操作的性能瓶颈也不是CPU导致的</li>
+<li>使用单线程模型，代码简便的同时减少了线程上下文切换带来的性能开销</li>
+<li>Redis在单线程的情况下，使用I&#x2F;O多路复用模型就可以提高Redis的I&#x2F;O利用率了</li>
+</ul>
+<p>请求量的争夺，Redis的执行瓶颈主要在于网络I&#x2F;O，加入多线程提高网络I&#x2F;O处理速度</p>
+<p>所以所谓的引入多线程只是在网络请求中使用多线程，但是在数据命令读写的处理方面仍然是单线程的。</p>
+<p>而且因为只是针对网络请求模块采用的多线程， 但是读写还是单线程，所谓的线程安全问题就不存在了。</p>
+<h3 id="I-O模型"><a href="#I-O模型" class="headerlink" title="I&#x2F;O模型"></a>I&#x2F;O模型</h3><ol>
+<li>同步阻塞模型，BIO：线程调用read时，如果数据还未到，线程会一直阻塞等待，数据从网卡到内核，再从内核拷贝到用户空间，这两个拷贝过程都视为阻塞操作</li>
+<li>同步非阻塞模型，NIO：在非阻塞模型下，read调用如果没有数据立刻返回错误，不会阻塞线程，应用程序需要不断轮询数据是否就绪，但数据拷贝到用户空间依旧阻塞。</li>
+<li>I&#x2F;O多路复用：通过一个线程使用select、poll、epoll等系统调用，监控多个连接的状态，只有当某个连接的数据就绪时，系统才会通知application，再由应用程序调用read进行数据读取</li>
+<li>信号驱动I&#x2F;O：由内核在数据就绪时发出信号通知应用程序，应用程序接收到信号后再调用read</li>
+<li>异步I&#x2F;O，AIO：调用aio_read后，内核负责将数据从网卡拷贝到用户空间，拷贝完成后通过回调通知应用程序，整个过程没有阻塞</li>
+</ol>
+<p>多路I&#x2F;O复用和NIO的区别：NIO线程自己轮询自己，多路I&#x2F;O一个线程监管它管理的所有连接是否有数据就绪，有就通知别的线程来read读取数据，从内核到用户空间的拷贝还是会阻塞线程</p>
+<p>信号驱动I&#x2F;O：由内核自动告知线程数据准备就绪，然后用户线程再去read</p>
+<p>但是因为TCP协议的socket可以产生信号事件有七种，不仅仅只有数据准备就绪可以发信号，其他事件也可以发信号，这两个信号又是同一个信号，application无法区分，所以基本不适用信号驱动I&#x2F;O，UDP可以，UDP没有那么多事件</p>
+<h3 id="Redis实现分布式锁时可能遇到哪些问题"><a href="#Redis实现分布式锁时可能遇到哪些问题" class="headerlink" title="Redis实现分布式锁时可能遇到哪些问题"></a>Redis实现分布式锁时可能遇到哪些问题</h3><ol>
+<li>业务未执行完毕，锁已经到期：针对这个问题可以设置续约机制，比如Redission中的看门狗机制，设置一个TTL，启动一个守护线程，固定事件检查目标线程状态，如果没有执行完毕，就重新设置锁的超时事件，续约。</li>
+<li>单点故障问题：Redis单机部署，实例宕机不可用时，整个分布式锁服务就无法正常工作了</li>
+<li>主从问题不同步问题：线上Redis采用主从+哨兵部署，分布式锁可能出现以下的这种问题：Redis的主从复制异步执行，如果Redis主节点获得锁之后，还没有同步到其他从节点，但是主节点宕机，从节点选出新的主节点，但是新的主节点没有上锁，其他的线程就可以获取锁，导致多应用服务同时获取锁</li>
+<li>网络分区问题：客户端和Redis因为网络问题中间的连接中断，未设置锁的过期时间，导致锁无法正常释放，如有多个锁还可能导致死锁。</li>
+<li>时钟漂移问题</li>
+<li>锁的可重入性问题</li>
+<li>误释放锁问题</li>
+</ol>
+<h3 id="工厂模式和抽象工厂模式有什么区别"><a href="#工厂模式和抽象工厂模式有什么区别" class="headerlink" title="工厂模式和抽象工厂模式有什么区别"></a>工厂模式和抽象工厂模式有什么区别</h3><p>工厂模式关注的是创建单一类型对象，定义一个抽象方法，由子类实现具体对象的实例化</p>
+<p>抽象工厂模式关注创建一族相关对象，提供一个接口来创建一组相关的或互相依赖的对象，而无需指定它们的具体类。</p>
+<h3 id="SpringBoot如何实现自动配置"><a href="#SpringBoot如何实现自动配置" class="headerlink" title="SpringBoot如何实现自动配置"></a>SpringBoot如何实现自动配置</h3><p>SpringBoot的自动配置通过@EnableAutoConfiguration注解实现，这个注解包含@Import({AutoConfigurationImportSelector.class})注解，导入的这个类会去扫描classpath下的所有META-INF&#x2F;spring.factories中的文件，根据文件中指定的配置类加载相应的Bean的自动配置。</p>
+<p>Bean通常使用@ConfitionalOnClass、@ConditionOnMissingBean、@ConditionalOnProperty等条件注解，来控制自动配置的加载条件</p>
+<h3 id="MySQL的主从同步机制，如何实现"><a href="#MySQL的主从同步机制，如何实现" class="headerlink" title="MySQL的主从同步机制，如何实现"></a>MySQL的主从同步机制，如何实现</h3><p>MySQL的主从同步机制是一种数据复制技术，用于将主数据库上的数据同步到一个或多个从数据库中。</p>
+<p>主要通过二进制日志(binlog)实现数据的复制，主数据库在执行写操作时，会将这些操作记录到binlog中，然后推送给从数据库，从数据库重放对应的日志即可完成复制。</p>
+<ol>
+<li>异步复制：性能高，一致性差</li>
+<li>同步复制：性能差，一致性强</li>
+<li>半同步复制：综合以上两种</li>
+</ol>
+<h3 id="Redission分布式锁的原理"><a href="#Redission分布式锁的原理" class="headerlink" title="Redission分布式锁的原理"></a>Redission分布式锁的原理</h3><p>Redission是基于Redis实现的分布式锁，实际上使用Redis的原子操作来确保多线程、多进程或多节点系统中只有一个线程能获得锁，避免并发操作导致数据的不一致问题。</p>
+<ol>
+<li>锁的获取：Redission使用Lua脚本，利用exists+hexists+hincrby，确保只有一个线程能成功获取锁，设置pexpire命令为锁设置过期时间，防止因宕机等原因导致锁无法释放</li>
+<li>锁的续期，使用看门狗机制确保任务完成前不会释放锁</li>
+<li>锁的释放：通过Lua脚本确保释放锁的原子性，利用hexists + del ,publish，利用hexists + del确保只有持有锁的线程才能释放锁，防止误释放锁的情况</li>
+<li>可重入锁：Redission支持可重入锁，持有锁的线程可以获取同一把锁而不会被阻塞，利用Redis中的哈希结构，哈希中的key为线程ID，如果重入value+1，释放-1，减到0就del锁</li>
+</ol>
+<h4 id="Redission的锁类型"><a href="#Redission的锁类型" class="headerlink" title="Redission的锁类型"></a>Redission的锁类型</h4><p>公平锁：与可重入锁类似，公平锁确保多个线程按请求锁的顺序获取锁</p>
+<p>读写锁：支持读写分离。多个线程可以同时获取读锁，而写锁是独占的</p>
+<p>信号量与可数锁：允许多个线程同时持有锁，适用于资源的限流和控制</p>
+<h4 id="Redis中如何实现分布式锁"><a href="#Redis中如何实现分布式锁" class="headerlink" title="Redis中如何实现分布式锁"></a>Redis中如何实现分布式锁</h4><p>常见方法是：set ex nx命令+lua脚本组合使用，确保多个客户端不会获取同一个资源锁的同时，也确保了安全解锁和意外情况下锁的自动释放。</p>
+<ol>
+<li><p>加锁：set lock_key uniqueValue Ex expire_time NX</p>
+</li>
+<li><p>解锁：使用lua脚本，先通过get获取key的value判断锁是否是自己加的，如果是del</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> redis.call(<span class="string">&quot;GET&quot;</span>,KEYS[<span class="number">1</span>]) == ARGV[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> redis.call(<span class="string">&quot;DEL&quot;</span>,KEYS[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>为了解决单点故障问题，Redis推出了红锁</p>
+<p>什么是单点故障问题：主从集群中，主节点获取了锁，但是还来得及通知从节点就宕机了，从节点推出了新的主节点获取锁，这就会导致两个主节点抢夺锁，导致数据不一致。</p>
+<p>那么红锁要怎么解决这个问题？</p>
+<p>红锁的基本思想就是部署多个实例，然后客户端在大多数实例上请求锁成功后才表示加锁成功。</p>
+<h5 id="实现流程-1"><a href="#实现流程-1" class="headerlink" title="实现流程"></a>实现流程</h5><ol>
+<li>客户端在每个Redis实例上加锁，在有限时间内完成所有实例的加锁</li>
+<li>如果大多数实例(N&#x2F;2+1)加锁成功，表示加锁成功</li>
+<li>否则客户端将 释放所有已经加锁的实例，重新尝试</li>
+</ol>
+<h3 id="Redis如何快速实现排行榜"><a href="#Redis如何快速实现排行榜" class="headerlink" title="Redis如何快速实现排行榜"></a>Redis如何快速实现排行榜</h3><p>使用Redis实现排行榜的方式主要利用Sorted Set有序集合，可以高效地存储更新，获取排名数据</p>
+<ol>
+<li>使用Sorted Set存储分数和成员<ul>
+<li>使用Redis的ZADD命令，将用户和对应的分数添加到有序集合中，例如ZADD leaderboard 1000 uer1将user1的分数设置为100</li>
+</ul>
+</li>
+<li>获取排名 使用ZRANK命令获取某个用户的排名</li>
+<li>获取前N名，使用ZREVRANG命令获取分数最高的前N名，</li>
+<li>更新分数，使用ZINCRBy命令堆其分数进行加减操作</li>
+</ol>
+<h4 id="Sorted-Set-特点"><a href="#Sorted-Set-特点" class="headerlink" title="Sorted Set 特点"></a>Sorted Set 特点</h4><p>Sorted Set是Redis中的一个数据结构，内部使用Skip List来实现，增删改查操作的时间复杂度为O(logN)</p>
+<p>使用Sorted Set可以确保成员唯一性</p>
+<h3 id="Redis中如何保证缓存和数据库的数据一致性"><a href="#Redis中如何保证缓存和数据库的数据一致性" class="headerlink" title="Redis中如何保证缓存和数据库的数据一致性"></a>Redis中如何保证缓存和数据库的数据一致性</h3><ol>
+<li>先更新缓存，再更新数据库</li>
+<li>先写入数据库再写缓存</li>
+<li>先删除缓存再写数据库</li>
+<li>缓存双删</li>
+<li>先写数据库，再删除缓存</li>
+<li>先写数据库，通过BinLog异步更新缓存</li>
+</ol>
+<p>可以使用分布式读写锁来实现强一致性</p>
+<p>读读不互斥，读写互斥，写写互斥</p>
+<p>写操作：</p>
+<ul>
+<li>获取写锁</li>
+<li>更新数据库</li>
+<li>删除缓存</li>
+<li>释放写锁</li>
+</ul>
+<p>读操作：</p>
+<ul>
+<li>获取读锁</li>
+<li>查询缓存，缓存命中释放读锁，返回结果，没命中，读取数据库，将数据库更新到缓存</li>
+<li>释放读锁</li>
+</ul>
+<h3 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h3><p>客户端发送一个SYN（同步序列编号）消息给服务器，服务器收到后回复一个SYN-ACK（同步序号编号-确认）消息，最后客户端再发送一个ACK（确认）消息确认服务器客户端已经收到了SYN-ACK消息，建立可靠的TCP连接。</p>
+<p>为了解决因为网络本身的不稳定性能导致的数据丢失，数据重复传输， 数据乱序等问题，TCP引入了序列号，使得接收方可以根据序列号去重，根据序列号排序，发送方针对为接收到ACK的序列号对应的数据报可以重传。在三次握手阶段，双方完成了序列号的交换工作。</p>
+<ol>
+<li>发送方通过SYN控制消息并携带自己期望的初始序列号SEQ给接收方</li>
+<li>接收方收到了SYN消息后，通过ACK控制消息以及SEQ+1来进行确认，带上自己的SEQ</li>
+<li>发送方通过ACK控制消息以及接收方的SEQ+1来进行确认，并且还能够在第三次握手通信的同时，直接携带数据进行传输</li>
+</ol>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><ol>
+<li>第一次挥手：FIN-ACK，客户端主动关闭连接，发送FIN包，进入FIN_WAIT_1状态，服务器收到FIN后，表示不再接收数据，但可以继续发送数据</li>
+<li>第二次挥手：ACK，服务器发送ACK包，确认已收到FIN，服务器进入CLOSE_WAIT状态，客户端进入FIN_WAIT_2状态</li>
+<li>第三次挥手：FIN-ACK，服务器完成所有数据传输后，发送FIN包，进入LAST_ACK状态，客户端接收到FIN后，准备关闭连接</li>
+<li>第四次挥手：ACK，客户端发送最后一个ACK包，进入TIME_WAIT状态，等待可能迟到的FIN包，服务器接收到ACK后，关闭连接进入CLOSED状态，客户端在TIME_WAIT计时结束后正式关闭连接</li>
+</ol>
+<h4 id="为什么挥手需要四次"><a href="#为什么挥手需要四次" class="headerlink" title="为什么挥手需要四次"></a>为什么挥手需要四次</h4><p>TCP是一个全双工协议，双方都要关闭，每一方都向对方发送FIN和回应ACK，客户端发起连接断开，代表客户端没数据要发送，但是服务器可能还有数据没有返回给客户端，所以一个FIN+ACK代表一方结束数据的传输，因此两对队FIN+ACK，加起来就算四次通信。当服务器第二次挥手时没有数据传给客户端就可以时三次挥手了。</p>
+<h3 id="SpringBoot如何通过main方法启动web项目"><a href="#SpringBoot如何通过main方法启动web项目" class="headerlink" title="SpringBoot如何通过main方法启动web项目"></a>SpringBoot如何通过main方法启动web项目</h3><p>SpringBoot应用的启动流程封装在SprignApplicaiton.run方法中，大部分逻辑复用Spring的启动流程，只不过在基础上做了大量扩展，里面有一个刷出上下文的动作，这个方法会触发webServer的创建，此时创建并且开启内嵌的web服务，默认的web服务器就是tomcat。</p>
+<h3 id="为什么HashMap在Java中扩容时采用2的n次方倍"><a href="#为什么HashMap在Java中扩容时采用2的n次方倍" class="headerlink" title="为什么HashMap在Java中扩容时采用2的n次方倍"></a>为什么HashMap在Java中扩容时采用2的n次方倍</h3><p>采用2的n次方被作为容量，提高哈希值的分布均匀性，和哈希计算的效率。</p>
+<p>HashMap同过(n-1)&amp;hash来计算元素存储的索引位置，位运算只有在数组容量是2的n次方时才能确保索引均匀分布，位运算的效率高于取模运算，且HashMap扩容时，只需要通过简单的位运算就可以判断是否需要迁移，减少了重新计算索引的开销，提升rehash的效率</p>
+<p><strong>详解</strong>：采用2的n次方作为容量，n-1后低位都是1，这时进行&amp;操作，可以确保哈希码的最低几位均匀分布，如果是和0100 0000与哈希码进行&amp;运算，这个时候得到的地位就都是0了，随机性很差，都是冲突。</p>
+<p>位运算的效率&gt;取模运算，a%b ≈ a&amp; (b-1){当b的值是2的n次幂时}</p>
+<h4 id="Redis客户端"><a href="#Redis客户端" class="headerlink" title="Redis客户端"></a>Redis客户端</h4><ul>
+<li>jedis：适用于简单的同步操作和单线程环境</li>
+<li>Lettuce：适用于高并发，高性能，多线程环境，需要异步和响应式编程的场景</li>
+<li>Redisson：适用于分布式系统，提供丰富的分布式对象和服务，简化开发</li>
+</ul>
+<h3 id="TCP超时重传机制是为了解决什么问题"><a href="#TCP超时重传机制是为了解决什么问题" class="headerlink" title="TCP超时重传机制是为了解决什么问题"></a>TCP超时重传机制是为了解决什么问题</h3><p>TCP是面向连接的协议，需要确保数据可靠传输，在传输过程中如果由于网络阻塞，链路错误，路由器，主机故障等错误，数据包可能丢失或延迟，如果在规定时间内没有收到ACK，认为该数据包可能以及丢失，触发超时重传机制，重新发送该数据包，确保数据可靠到达。</p>
+<h4 id="TCP-ACK确认号"><a href="#TCP-ACK确认号" class="headerlink" title="TCP ACK确认号"></a>TCP ACK确认号</h4><p>TCP的可靠性依靠确认好，比如如果我想要第五个包，那你就要说明前面的四个包都以及收到了。</p>
+<h4 id="超时重传的时间RTO"><a href="#超时重传的时间RTO" class="headerlink" title="超时重传的时间RTO"></a>超时重传的时间RTO</h4><p>为了确保超时中的时具体为多少，这个时候引入RTO，</p>
+<p>RTT：来回一趟的时间</p>
+<p>计算RTO步骤</p>
+<ol>
+<li>采样RTT</li>
+<li>SRTT &#x3D; (ALPHA * SRTT) + ((1-ALPHA)*RTT)</li>
+<li>RTO &#x3D; min[UBOUND,max[LBOUND,(BETA*SRTT)]]</li>
+</ol>
+<p>alpha ： 平滑因子 0.8-0.9</p>
+<p>ubound：超时时间上界 -1 分钟</p>
+<p>lbound：下界 -1秒钟</p>
+<p>beta ： 延迟方差因子 1.3-2.0</p>
+<h3 id="MyBatis插件运行原理，如何编写一个插件"><a href="#MyBatis插件运行原理，如何编写一个插件" class="headerlink" title="MyBatis插件运行原理，如何编写一个插件"></a>MyBatis插件运行原理，如何编写一个插件</h3><p>MyBatis的插件机制通过动态代理实现，主要是在SQL执行的关键点（如执行查询，更新，插入）拦截操作并增强功能，拦截器的拦截点：</p>
+<ul>
+<li>Executor：负责执行增删改查的操作</li>
+<li>ParameterHandler：负责处理SQL语句中的参数</li>
+<li>ResultSetHandler：负责处理结果集</li>
+<li>StatementHandler：负责处理SQL语句</li>
+</ul>
+<p>MyBatis会在运行时根据配置加载插件，在拦截点生成代理对象，当拦截点的方法被调用时，MyBatis会先调用插件的intercept方法，如果有多个插件，按配置顺序依次执行。</p>
+<h4 id="如何编写一个MyBatis插件"><a href="#如何编写一个MyBatis插件" class="headerlink" title="如何编写一个MyBatis插件"></a>如何编写一个MyBatis插件</h4><ol>
+<li>实现Interceptor接口，编写一个类，实现MyBatis的Interceptor接口，定义拦截逻辑</li>
+<li>定义拦截逻辑：在intercept方法中实现增强逻辑，使用Invocation对象调用目标方法</li>
+<li>配置插件：在mybatis-config.xml文件中配置插件类和参数</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Intercepts(&#123;</span></span><br><span class="line"><span class="meta">    @Signature(</span></span><br><span class="line"><span class="meta">        type= StatementHandler.class,</span></span><br><span class="line"><span class="meta">        method = &quot;prepare&quot;,</span></span><br><span class="line"><span class="meta">        args = &#123;Connection.class, Integer.class&#125;</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line"><span class="meta">&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ExamplePlugin</span> <span class="keyword">implements</span> <span class="title class_">Interceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Invocation invocation)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">// 获取被代理对象</span></span><br><span class="line">        <span class="type">StatementHandler</span> <span class="variable">statementHandler</span> <span class="operator">=</span> (StatementHandler) invocation.getTarget();</span><br><span class="line">        <span class="comment">// 获取 SQL 语句</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">sql</span> <span class="operator">=</span> statementHandler.getBoundSql().getSql();</span><br><span class="line">        System.out.println(<span class="string">&quot;SQL: &quot;</span> + sql);</span><br><span class="line">        <span class="comment">// 继续执行其他插件链和目标方法</span></span><br><span class="line">        <span class="keyword">return</span> invocation.proceed();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">plugin</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="comment">// 创建代理对象</span></span><br><span class="line">        <span class="keyword">return</span> Plugin.wrap(target, <span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setProperties</span><span class="params">(Properties properties)</span> &#123;</span><br><span class="line">        <span class="comment">// 从配置中获取属性，例如：</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">someProperty</span> <span class="operator">=</span> properties.getProperty(<span class="string">&quot;someProperty&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Some Property: &quot;</span> + someProperty);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Mybatis配置注册代码 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugin</span> <span class="attr">interceptor</span>=<span class="string">&quot;com.example.ExamplePlugin&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;someProperty&quot;</span> <span class="attr">value</span>=<span class="string">&quot;value&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="常见用途"><a href="#常见用途" class="headerlink" title="常见用途"></a>常见用途</h5><ol>
+<li>性能分析：统计SQL的执行时间，输出到日志</li>
+<li>动态参数注入：在ParameterHandler中修改或添加SQL参数</li>
+<li>数据脱敏：在ResultSetHandler中对查询结果进行脱敏处理</li>
+<li>自动分页：在StatementHandler中拦截SQL，自动添加分页逻辑</li>
+</ol>
+<h3 id="Java中数组和链表的区别是什么"><a href="#Java中数组和链表的区别是什么" class="headerlink" title="Java中数组和链表的区别是什么"></a>Java中数组和链表的区别是什么</h3><p>内存分配是否需要连续空间，增删改查的时间复杂度不同，因此适用的常见也不同</p>
+<h4 id="Redis中常见的数据类型"><a href="#Redis中常见的数据类型" class="headerlink" title="Redis中常见的数据类型"></a>Redis中常见的数据类型</h4><p><strong>String</strong>：存储任何类型的数据，文本，数字，二进制数据等，常用于缓存，计数器……</p>
+<p><strong>Hash</strong>：键值对集合，适合存储对象的属性，Redis内部使用哈希表实现，适合小规模数据，常用于存储商品的各个属性，方便快速检索。</p>
+<p><strong>List</strong>：有序的字符串集合，支持从两端推入和弹出元素，底层为双向链表。适用消息队列，通过LPUSH和RPOP操作实现生产者消费者模式，和存储历史记录等</p>
+<p><strong>Set</strong>：无序且不重复的字符串集合，使用哈希表实现，支持快速查找和去重操作，适用标签系统，避免重复标签，记录唯一用户集合</p>
+<p><strong>Sorted Set</strong>：有序的不重复集合，每个元素有一个分数score，用于排序，底层使用跳表实现支持快速的范围查询，可以用于排行榜任务调度等。</p>
+<p><strong>BitMap</strong>：以位为单位存储数据的高效方式，用来表示布尔值，每个bit可以表示一个状态(0或1)，使用空间少且操作快速。如果要统计用户的在线状态，可以用Bitmap记录每个用户是否在线</p>
+<p><strong>HyperLogLog</strong>：HyperLogLog是一种概率性数据结构，用于估算基数，内存占用固定，适合处理大规模数据的去重和计数。如果要估算访问网站的独立用户数量</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PFADD unique<span class="operator">:</span>visitors user1 user2 user3  <span class="comment"># 添加用户 ID</span></span><br><span class="line">PFCOUNT unique<span class="operator">:</span>visitors                  <span class="comment"># 估算独立用户数量</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>GEO</strong>：Redis提供的一种用于存储地理位置信息的数据结构，可以存储经纬度信息并支持空间查询</p>
+<p><strong>Stream</strong>：Redis提供的一种日志数据结构，适合存储时间序列数据或消息流，支持高效的消息生产和消费模式，具有持久性和序列化特性。</p>
+<h3 id="TCP滑动窗口的作用"><a href="#TCP滑动窗口的作用" class="headerlink" title="TCP滑动窗口的作用"></a>TCP滑动窗口的作用</h3><p>作用：流量控制，即协调发送方和接收方的数据传输速率，确保发送方不会发送超出接收方处理能力的数据量，防止接收端缓冲区溢出，滑动窗口允许发送方在未接收到前一个数据包的确认前继续发送多个数据包，提高网络吞吐量，减少等待时间，实现高效的数据流传输。</p>
+<p>为什么有了滑动窗口还要有拥塞控制？</p>
+<p>滑动窗口根据接收方的处理能力调节，防止因为接收端处理不及时导致的数据丢失和阻塞，用塞控制是为了防止网络本身的拥塞情况，在网络中出现过载时，调节发送方的传输速率，避免进一步加剧拥塞。</p>
+<p>拥塞主要处理网络问题，滑动窗口处理接收方处理慢的问题。</p>
+<h3 id="Redis的持久化机制"><a href="#Redis的持久化机制" class="headerlink" title="Redis的持久化机制"></a>Redis的持久化机制</h3><ul>
+<li><p>RDB快照：生成某个时刻的数据快照实现持久化，在特定时间间隔内保持数据的快照，适合灾难恢复和备份，生成二进制文件，但是可能丢失最后一次快照之后的数据</p>
+</li>
+<li><p>AOF日志</p>
+<ul>
+<li>AOF通过将每个写操作追加到日志文件中实现持久化，将写操作记录下来方便恢复</li>
+<li>数据恢复更准确，但是体积大，重写消耗更多资源</li>
+</ul>
+</li>
+<li><p>Redis4.0增加了RDB和AOF的混合持久化机制</p>
+</li>
+</ul>
+<h4 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h4><p>RDB创建快照获取内存某个时间点上的副本，利用快照进行主从复制，默认快照文件为dump.rdb</p>
+<p>redis.conf文件可以配置在x秒内如果有y个key变化就触发命令就行持久化操作</p>
+<ul>
+<li>优点：快速加载：生成的快照文件是压缩的二进制，适合备份和灾难恢复，低资源占用，持久化在Redis主线程外进行</li>
+<li>缺点：数据丢失，RDB是间隔性保持的快照，如果Redis崩溃，可能丢失上次保持的快照数据</li>
+</ul>
+<h5 id="RBB持久化命令"><a href="#RBB持久化命令" class="headerlink" title="RBB持久化命令"></a>RBB持久化命令</h5><ul>
+<li>save：在主线程生成RDB文件，生成期间，主线程无法正常执行读写命令，需要等待RDB结束</li>
+<li>bgsave：利用Fork操作得到子进程，在子进程执行RDB生成，不阻塞主进程，默认bgsave命令</li>
+</ul>
+<p><strong>bgsave流程</strong></p>
+<ol>
+<li>检查子进程：检查是否有AOF&#x2F;RDB的子进程正在进行，有返回错误</li>
+<li>触发持久化，调用rdbSaveBackground</li>
+<li>开始fork（Fork操作会产生短暂阻塞），子进程执行rdb操作，同时主线程影响其他操作</li>
+<li>RDB完成，替换旧的RD吧文件，子进程退出</li>
+</ol>
+<p>RDB备份的是数据，而不是像AOF一样备份命令，恢复数据的速度要更快，Fork操作利用了写时复制，类似CopyOnWriteArrayList</p>
+<p>那么什么是写时复制？</p>
+<p>主进程fork出了一个子进程，不会把主进程中的所有内存数据复制到一份子进程，主进程和子进程共享内存，父进程和子进程分别对应一个页表，但是页表映射的物理内存还是同一块，当父进程接收到写命令，会将对应数据的页复制一份，然后进行修改，子进程指向的还是老的页，数据没有变化，符合快照</p>
+<h5 id="AOF详解"><a href="#AOF详解" class="headerlink" title="AOF详解"></a>AOF详解</h5><p>AOF：记录写操作，以追加的形式写入到磁盘中的AOF文件，AOF记录了Redis在内存中的操作，Redis重启后执行AOF文件中的命令就可以把数据恢复到内存中。</p>
+<p>aof-use-rdb-preamble配置开启混合持久化</p>
+<p>AOF写回策略：</p>
+<ul>
+<li>always：每次写操作后调用fsync，将数据同步都爱磁盘，保证安全性，性能低</li>
+<li>everysec：每秒一次，折中方案</li>
+<li>no：操作系统决定什么时候写入磁盘，一般是一定时间后，或者缓冲区满数据同步到磁盘，性能高，安全性低</li>
+</ul>
+<p><strong>AOF重写机制</strong></p>
+<p>AOF重写不是对现有的AOF文件进行修改，而是根据当前每个键的最新值转换为对应写命令，写入新的AOF中，形成新文件，后台AOF重写，也fork子进程，也有写时复制机制</p>
+<p><strong>重写流程</strong></p>
+<ol>
+<li>创建子进程，Redis使用BgRewriteAof命令创建一个子进程，负责AOF重写操作</li>
+<li>生成新的AOF文件，根据数据库状态写入新的AOF文件</li>
+<li>处理新写入命令，主线程助理新的写操作，为了避免数据不一致，主进程将新的写命令追加到现有的AOF文件和一个缓冲区</li>
+<li>合并新命令，子进程完成新的AOF文件写入后，主进程将缓冲区的新命令追加到新的AOF文件中</li>
+<li>替换旧的AOF文件，最后Redis执行新的AOF文件替换到旧的文件，实现AOF文件的重写</li>
+</ol>
+<ul>
+<li>手动触发AOF重写：使用bgrewriteaof命令手动触发AOF重写</li>
+<li>自动触发，通过配置文件中的参数配置，auto-aof-rewrite-min-size：AOF达到这个大小后重写，auto-aof-rewrite-percentage：当前AFO文件大小相当于上次重写后的增长百分比达到这个值重写。</li>
+</ul>
+<h5 id="Redis7-0之前的问题"><a href="#Redis7-0之前的问题" class="headerlink" title="Redis7.0之前的问题"></a>Redis7.0之前的问题</h5><ol>
+<li>内存开销：aof_buf和aof_rewrite_buf中内容重复</li>
+<li>CPU开销：主线程花费CPU向aof_rewirte_buf写入数据，向子进程发送aof_rewrite_buf中的数据，子进程消耗CPU时间将aof_rewrite_buf写入新AOF文件</li>
+<li>磁盘开销：aof_buf数据回写到当前的AOF文件，aof_rewrite_buf数据写到新的AOF文件，一份数据两次写入磁盘</li>
+</ol>
+<p><strong>解决</strong>：引入MP-AOF机制，将一个AOF拆分成多个文件</p>
+<ul>
+<li>一个基础文件，代表数据的初始快照</li>
+<li>增量文件，记录自基础文件创建以来的所有写操作</li>
+<li>基础文件和增量文件都存放在一个单独的目录中，由一个清单文件进行统一跟踪和管理</li>
+</ul>
+<h3 id="Redis主从复制的实现原理"><a href="#Redis主从复制的实现原理" class="headerlink" title="Redis主从复制的实现原理"></a>Redis主从复制的实现原理</h3><p><strong>简单回答</strong>：从节点会向主节点发送psync命令发起同步，如果是第一次连接，发起全量复制，从数据快照RDB发送给从节点，全量复制完成后，主从节点保持长连接，主节点将后续的写操作传递给从节点执行，保证数据一致性</p>
+<h3 id="Redis数据过期后的删除策略是什么"><a href="#Redis数据过期后的删除策略是什么" class="headerlink" title="Redis数据过期后的删除策略是什么"></a>Redis数据过期后的删除策略是什么</h3><p><strong>简单回答</strong>：两种删除策略，定期删除，惰性删除，前者每个一定时间随机检查一定数量的键，发现过期的就删除，后者则是当有访问时，再检查键是否过期，过期删除，否则即使过期了但是没被访问也不会删除</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" data-id="cmi3z7ug90001ngtialy2gawn" data-title="java-bagu" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%BB%E9%A2%98%E5%90%8D/" rel="tag">主题名</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/11/10/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">zbc的笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%88%86%E7%B1%BB%E5%90%8D/">分类名</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%BB%E9%A2%98%E5%90%8D/" rel="tag">主题名</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E4%B8%BB%E9%A2%98%E5%90%8D/" style="font-size: 10px;">主题名</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">November 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/">java-bagu</a>
+          </li>
+        
+          <li>
+            <a href="/2025/11/10/hello-world/">zbc的笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
