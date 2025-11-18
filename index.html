@@ -71,6 +71,661 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/11/11/MySQL/" class="article-date">
+  <time class="dt-published" datetime="2025-11-11T06:00:00.000Z" itemprop="datePublished">2025-11-11</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%88%86%E7%B1%BB%E5%90%8D/">分类名</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/11/11/MySQL/">mysql</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># MySQL</span><br><span class="line"></span><br><span class="line">先从MySQL的基础结构开始：</span><br><span class="line"></span><br><span class="line">MySQL分为连接层，服务层存储引擎层</span><br><span class="line"></span><br><span class="line">连接层：负责进行权限的校验，对用户信息进行身份认证</span><br><span class="line"></span><br><span class="line">服务层：负责SQL的解析、优化、缓存及跨存储引擎功能的实现，分别由分析器，优化器，和执行器分别完成这些功能</span><br><span class="line"></span><br><span class="line">存储引擎层：用于数据的存储和提取，采用插件式架构</span><br><span class="line"></span><br><span class="line">由此我们可以看到一条SQL语句的执行过程</span><br><span class="line"></span><br><span class="line">1. 由连接层进行权限校验</span><br><span class="line">2. 进入服务层，服务层的分析器对SQL进行语法分析，词法分析</span><br><span class="line">3. 优化器选择合适的索引和表的连接顺序</span><br><span class="line">4. 最后server调用引擎层，查找数据，返回数据结果</span><br><span class="line"></span><br><span class="line">上面提到了MySQL的存储引擎采用插件式架构，那么存储引擎都有什么类型</span><br><span class="line"></span><br><span class="line">- InnoDB：MySQL的默认存储引擎，底层采用B+树的数据结构存储数据，支持事务，行级锁，和外键</span><br><span class="line">- MyISAM：不支持事务，外键，适用读取多更新少的数据库，底层也采用B+树，但是索引和数据分开存储，且在崩溃后不能安全恢复，无redo_log</span><br><span class="line">- Memory：将数据存储在内存中，提高查找速度</span><br><span class="line">- NDB：常用于分布式应用中</span><br><span class="line"></span><br><span class="line">![image-20251031094810325](D:\user\hexoBlog\pictures\image-20251031094810325.png)</span><br><span class="line"></span><br><span class="line">## 图解</span><br><span class="line"></span><br><span class="line">### 一条SQL语句的执行过程</span><br><span class="line"></span><br><span class="line">1. 连接器建立连接</span><br><span class="line">   - 和客户端TCP三次握手建立连接，和HTTP一样也有长连接和短连接的 概念。长连接会占用内存，为了解决这个问题， 可以定期断开长连接，或者客户端主动重置连接，通过mysql_reset_connection函数实现</span><br><span class="line">   - 校验客户端的用户名和密码，不对报错</span><br><span class="line">   - 对了，读取用户权限，后面的权限逻辑判断基于权限</span><br><span class="line">2. 查询缓存：因为数据库表的更新较为频繁，所以这个功能比较鸡肋，在mysql8后就移除了server层的查询缓存，但是Innodb存储引擎中的buffer pool还保留着</span><br><span class="line">3. 解析器：先词法分析，识别关键字（如select、from）等，然后语法分析，根据语法规则判断SQL语法是否正确</span><br><span class="line">4. 执行SQL：</span><br><span class="line">   - 预处理器：检查SQL查询语句中的表或者字段是否存在，将*扩展为表上的所有列</span><br><span class="line">   - 优化器：为SQL查询语句制定一个执行计划，将SQL语句的执行方案确定，主要就是决定采用什么索引，MySQL中可以使用explain加在查询SQL前查看使用了什么索引</span><br><span class="line">   - 执行器：执行器和存储引擎交互，执行SQL语句。</span><br><span class="line">     - 第一次查询，调用read_first_record函数指针指向的函数，把查询条件交给存储引擎，让存储引擎定位符合条件的第一天记录</span><br><span class="line">     - 执行器从存储引擎督导记录，判断是否符合条件，符合条件就发送给客户端，不符合跳过该记录</span><br><span class="line">     - 执行器查询的过程是while循环，再查一次，因为不是第一次查询，read_record函数指针指向一个永远返回-1的函数，调用该函数时，执行器退出循环，结束查询。</span><br><span class="line"></span><br><span class="line">**Total**：</span><br><span class="line"></span><br><span class="line">- 连接器：建立连接，管理连接，校验用户身份</span><br><span class="line">- 查询缓存：查询语句命中缓存直接返回，否则继续向下指向，mysql8后删除了该模块</span><br><span class="line">- 解析SQL：通过解析器对SQL查询语句进行词法分析、语法分析，构建语法树……</span><br><span class="line">- 执行SQL：</span><br><span class="line">  - 预处理阶段：检查表和字段是否存在，将* 扩展为表的所有列</span><br><span class="line">  - 优化阶段：选择最小的成本的执行计划</span><br><span class="line">  - 执行阶段：根据执行计划执行SQL查询语句，从存储引擎读取记录，返回给客户端。</span><br><span class="line"></span><br><span class="line">### MySQL一条记录的存储过程</span><br><span class="line"></span><br><span class="line">建立数据库database后，在/var/lib/mysql中建立一个以database为名的目录，表结构，表数据的文件都存储在这个目录中。</span><br><span class="line"></span><br><span class="line">db.opt：用来存储当前数据库的默认字符集和字符校验规则</span><br><span class="line"></span><br><span class="line">t_order.frm：t_order的表结构保存在这个文件，MySQL中会为每个表生成一个.frm文件，该文件用来存放每个表的元数据信息，主要是表结构的定义</span><br><span class="line"></span><br><span class="line">t_order.ibd：t_order的表数据保存在这个文件，表数据既可以存储在共享表空间文件里（文件名：ibdata1），也可以存储在单独表空间文件（文件名：表名字.ibd）由参数innodb_file_per_table控制，如果设置了其为1，会将存储的数据，索引等信息存储在一个独占表空间中，mysql5之后默认值为1，也就是每个表都有一个独立的.idb文件。</span><br><span class="line"></span><br><span class="line">#### 表空间文件的结构</span><br><span class="line"></span><br><span class="line">表空间组成：段，区，页，行组成。</span><br><span class="line"></span><br><span class="line">**1、行**：数据库表中的记录都按行进行存放，根据不同行格式有不同的存储结构</span><br><span class="line"></span><br><span class="line">**2、页**：InnoDB的数据按页为单位来读写，要读取某个一条记录时，不是将这行记录从磁盘中读出，而是以页为单位读出，每页16KB，所以数据库的每次读写都是以16KB为单位的。页有数据页，undo日志页，溢出页等类型，数据表中的是数据页来管理（详见https://xiaolincoding.com/mysql/index/page.html）</span><br><span class="line"></span><br><span class="line">**3、区**：区的存在是为了解决逻辑上相邻的两个页之间的物理位置并不连续而出现的，如果两个页之间的物理位置不连续，磁盘查询时会出现大量I/O，效率很低。</span><br><span class="line"></span><br><span class="line">为了避免随机IO，就可以在大数据量时，为索引分配空间时不再按照页为单位进行分配，而是按照区为单位进行分配，每个区的大小为1MB，对于16KB的页来说，会有连续的64个页被划分为一个区，这样链表中相邻的页物理位置页相邻了，使用顺序IO。</span><br><span class="line"></span><br><span class="line">**4、段**：多个区组成段，分为数据段，索引段，回滚段。</span><br><span class="line"></span><br><span class="line">- 索引段：存放B+树的非叶子节点的区的集合</span><br><span class="line">- 数据段：存放B+树的叶子节点的区的集合</span><br><span class="line">- 回滚段：存放的时回滚数据的区的结合，MVCC利用了回滚段实现多版本查询数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### InnoDB行格式有哪些</span><br><span class="line"></span><br><span class="line">- Redundant是一种古老的行格式已经不用了</span><br><span class="line"></span><br><span class="line">Compact、Dynamic、Compressed三种紧凑的行格式，MySQL5.7后默认使用Dynamic行格式。</span><br><span class="line"></span><br><span class="line">**COMPACT**的行格式：</span><br><span class="line"></span><br><span class="line">| 记录的额外信息 | 记录的真实数据 |</span><br><span class="line">| -------------- | -------------- |</span><br><span class="line"></span><br><span class="line">| 变长字段长度列表 | NULL值列表 | 记录头信息 | \|\|\|\|\|\|\|\| | row_id | trx_id | roll_ptr | 列1值 | 列2值 | 列n值 |</span><br><span class="line">| ---------------- | ---------- | ---------- | ---------------- | ------ | ------ | -------- | ----- | ----- | ----- |</span><br><span class="line"></span><br><span class="line">记录的额外信息：变长字段长度列表，NULL值列表，记录头信息</span><br><span class="line"></span><br><span class="line">变长字段实际存储的数据的长度不固定，在存储数据时，也把数据占用的大小存起来，读取数据的时候根据这个[变长字段长度列表]去读取对应长度的数据，varchar、TEXT、BLOB等变长字段也是这么实现的</span><br><span class="line"></span><br><span class="line">```mysql</span><br><span class="line">create table &#x27;t_user&#x27;(</span><br><span class="line">	&#x27;id&#x27; int(11) not null,</span><br><span class="line">    &#x27;name&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;phone&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;age&#x27; int(11) default null,</span><br><span class="line">    primary key(&#x27;id&#x27;) using btree</span><br><span class="line"> )engine = innodb default character set = ascii row_format = compact</span><br></pre></td></tr></table></figure>
+
+<p>对于：</p>
+<p>如 id &#x3D; 1 , name &#x3D; a , phone &#x3D; 123,age &#x3D; 18这样的记录</p>
+<p>在行格式中在变长字段长度列表中两个的长度的存储会逆序存放，比如这条数据中就会先存放phone的长度信息，再存放name的长度信息。</p>
+<p>那么为什么信息要逆序存放？</p>
+<p>因为再记录头信息中指向下一个记录的指针，指向的是下一条记录的记录头信息和真实数据之间的位置，这样向左读就是记录头信息，向右读就是真实数据，而之所以逆序存放，靠前记录的真实数据和数据对应的字段长度信息可以同时在一个CPU Cache Line中，可以提高CPU Cache的命中率同理NULL值列表的信息也要逆序存放。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">这是一个展开，如果不懂什么是CPU Cache可以看：</span><br><span class="line">CPU Cache高速缓存，容量小但是离CPU近，缓存的读写速度快，CPU运算时从CPU Cache获取数据，不从内存获取，速度会很快。</span><br><span class="line">由于内存和CPU之间的访问速度相差过大，为了弥补CPU和内存间的性能差异，引入了CPU Cache（这是由材料性能决定的，CPU Cache的造价更高）CPU Cache通常大小分为三级缓存：L1 Cache、L2 Cache、L3 Cache。</span><br><span class="line">在Linux中可以通过以下命令查看CPU Cache的大小：</span><br><span class="line"> cat      /sys/devices/system/cpu/cpu0/cache/index0|1|2|3/size</span><br><span class="line"></span><br><span class="line">L1 Cache分为数据缓存和指令缓存,index0查看数据缓存大小，index1查看指令缓存大小，L1 Cache和L2 Cache都是每个CPU核心独有的，而L3Cache是多个CPU核心共享的</span><br><span class="line"></span><br><span class="line">一般内存中的数据会先加载到L3 Cache中，再加载到每个核心独有的L2 Cache 最后加载到L1 Cache中</span><br><span class="line"></span><br><span class="line">CPU Cache结构：</span><br><span class="line">CPU Cache由多个Cache Line组成，Cache Line是CPU从内存读取数据的基本单位，Cache Line(缓存块)=(Tag + Data Block)*n</span><br><span class="line">如下命令查看Cache Line的大小</span><br><span class="line">cat /sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size </span><br><span class="line">64</span><br><span class="line">这里就代表L1 Cache一次载入数据的大小是64字节</span><br><span class="line"></span><br><span class="line">CPU怎么知道要访问的内存数据是否在Cache中，在的话怎么找到Cache对应的数据，这里就涉及到了计组的知识点：直接映射等映射方式</span><br><span class="line"></span><br><span class="line">CPU Cache Line中有如下信息：</span><br><span class="line">1.组标记：用来记录当前CPU Cache Line中存储的数据对应的内存块，用这个组标记区分不同的内存块</span><br><span class="line">2.数据：从内存中加载过来的实际数据</span><br><span class="line">3.有效位：标记对应的CPU Cache Line中的数据是否有效，如果为0则说明无效，CPU会直接跳过缓存去访问内存</span><br><span class="line"></span><br><span class="line">CPU读取Cpu Cache时，不读取CPU Cache Line的整个是数据块，读取CPU所需要的数据片段（字），利用偏移量这一个信息可以找到对应的字（一个内存的访问地址包括：组标记，CPU Cache Line索引，偏移量三个信息）CPU Cache中的数据结构由：索引+有效位+组标记+数据库组成</span><br></pre></td></tr></table></figure>
+
+<h4 id="NULL值列表"><a href="#NULL值列表" class="headerlink" title="NULL值列表"></a>NULL值列表</h4><p>某些列中会存储NULL值，如果存储在真实数据汇中会浪费空间，在Compact行格式把这些NULL存储到了NULL值列表中，对于允许NULL值存在的列中，每个列对应一个二进制位，二进制位按照列的顺序逆序排列，二进制位的值为1说明该列的值为NULL，为0说明不为NULL。值得说明的是NULL值列表必须用整数个字节的位表示，不够整个字节高位补0。</p>
+<p>如果字段都被设置成了NOT NULL，那么就可以省区一个字节的空间（不用由NULL值列表了）</p>
+<h4 id="记录头信息"><a href="#记录头信息" class="headerlink" title="记录头信息"></a>记录头信息</h4><ul>
+<li>delete_mask：标识此条数据是否被删除，这里和Java实体中的逻辑删除异曲同工</li>
+<li>next_record：下一条记录的位置，记录和记录之间通过链表组织</li>
+<li>record_type：记录当前记录的类型，1表示B+树非叶子节点记录，2表示最小记录，3表示最大记录</li>
+</ul>
+<h4 id="记录的真实数据"><a href="#记录的真实数据" class="headerlink" title="记录的真实数据"></a>记录的真实数据</h4><ul>
+<li>row_id：如果建表时指定了主键或者唯一约束列，那么就没有隐藏的row_id字段了，如果既没有指定主键，又没有唯一约束，InnoDB就会为记录添加row_id隐藏字段，这个字段不是必须的，占用6个字节</li>
+<li>trx_id：事务id，表示这个数据是哪个事务生成的，trx_id是必须的，占用6个字节</li>
+<li>roll_pointer：记录上一个版本的指针，roll_pointer是必须的，占用七个字节</li>
+</ul>
+<h4 id="varchar-n-最大值为多少"><a href="#varchar-n-最大值为多少" class="headerlink" title="varchar(n)最大值为多少"></a>varchar(n)最大值为多少</h4><p>MySQL中规定除了TEXT，BLOBs这种大对象类型外，其他所有列占用的字节长度加起来不超过65535字节（一行的长度）而varchar(n)中的n指的是最大字符数，n最大多大，能存储多少字符要取决于字符集的类型。</p>
+<p>所有列中包括了变长字段长度列表和NULL值列表，在计算n的最大值时要在65535的基础上减去这两列占据的字节大小，然后再根据字符集规则去计算可以容纳的最大字符数。</p>
+<p>如果是多字段还要算上其他字段的长度。</p>
+<h3 id="行溢出后，MySQL是怎么处理的"><a href="#行溢出后，MySQL是怎么处理的" class="headerlink" title="行溢出后，MySQL是怎么处理的"></a>行溢出后，MySQL是怎么处理的</h3><p>MySQL中磁盘和内存的交互基本单位是页，一页的大小一般是16KB（16384字节）如果存储大数据时，一页存不下一条记录，就会发生行溢出，多的数据会存储到溢出页中，同时在真实数据处用20字节存储指向溢出页的地址</p>
+<h2 id="索引面试题"><a href="#索引面试题" class="headerlink" title="索引面试题"></a>索引面试题</h2><h3 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h3><ul>
+<li>按[数据结构]分类：B+tree索引、Hash索引、Full-text索引</li>
+<li>按[物理存储]分类：聚簇索引（主键索引）、二级索引（辅助索引）</li>
+<li>按[字段 特性]分类：主键索引、唯一索引、普通索引、前缀索引</li>
+<li>按[字段个数]分类：单列索引、联合索引</li>
+</ul>
+<p><strong>各种存储引擎支持索引类别</strong></p>
+<table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>InnoDB引擎</th>
+<th>MyISAM引擎</th>
+<th>Memeory引擎</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B+Tree索引</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>HASH索引</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Full-Text索引</td>
+<td>yes</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+</tbody></table>
+<p>创建表时，InnoDB存储引擎根据不同的场景选择不同的列作为索引：</p>
+<ul>
+<li>有主键，默认使用主键作为聚簇索引的索引键</li>
+<li>没有主键，选择第一个不含NULL的唯一列作为聚簇索引的索引键</li>
+<li>都没有的情况下， 选择一个隐式自增id作为聚簇索引的索引键</li>
+</ul>
+<p>B+树的工作原理我这里就不多赘述了，如果是聚簇索引（主键索引）的话叶子节点存储的是数据，而非叶子节点存储的是索引值，每个叶子节点又有两个指针，分别指向上一个叶子节点和下一个叶子节点，会形成一个双向链表，可以实现快速查找。而二级索引（非聚簇索引，辅助索引）的叶子节点中存储的是索引信息和主键值。</p>
+<p>这里注意非叶子节点中存储的是索引列信息和主键值，那么如果查询的数据列中包含了索引列中没有的信息，就要根据查询到的二级索引中包含的主键索引去主键索引中查询数据，这个过程称之为回表，但是如果查询的列包含在了二级索引B+树的叶子节点中，就不需要回表操作这个过程称为覆盖索引。</p>
+<p><strong>那么为什么MySQL InnoDB选择B+Tree作为索引的数据结构？（对比B+树和其他的数据结构）</strong></p>
+<p> MySQL的数据是持久化的，数据会保存到磁盘上，但是磁盘的访问速度很慢，磁盘IO的最小单位是扇区，扇区是512B大小的，OS一次会读写多个扇区，OS的最小读写单位是块，4KB，一次磁盘IO会读写8个扇区。</p>
+<p>数据库的索引保存到磁盘上，通过索引查找某行数据时，先从磁盘读取索引到内存，再通过索引从磁盘到某行数据，读入到内存中，查询过程中多次磁盘IO，而我们实际应用中会希望尽量少的使用磁盘IO，MySQL支持范围查找，索引的数据结构不仅能高效的查询某一个记录，还要能进行范围查找。所以索引的数据结构应该满足：</p>
+<ul>
+<li>在尽量少的磁盘IO中完成查询工作</li>
+<li>能高效完成查询某一个记录，高效的执行范围查找</li>
+</ul>
+<p><strong>为什么不用二叉树</strong>？</p>
+<p>二叉树能满足快速查找的需求，但是不稳定很容易退化成链表，当插入的节点呈现递增趋势或递减趋势时，就会导致某一棵子树过长，最终退化成链表，而树存储在磁盘中，每次访问节点都会对应一次IO操作，也就是树越高越影响性能。</p>
+<p>在此基础上想到平衡二叉树，</p>
+<p><strong>但是为什么我们也没有采用自平衡的二叉树？</strong></p>
+<p>自平衡二叉树相比普通二叉树有这样的优点：每个节点的左子树和右子树的高度差不超过1，这样就可以确保查询操作的时间复杂度一直维持在O(logn)，但是不可避免的，随着插入的元素的增多，树的高度也会随之增高，磁盘的IO操作也会变多，极大层度影响了查询效率。我们这个时候就想，有没有一种可能让每个节点不只有两棵子树，B树产生了。</p>
+<p><strong>为什么不用B树</strong></p>
+<p>B树在原有的平衡二叉树的基础上，扩充了每个节点只能有两棵子树的限制，这样就降低了树的高度，查询的效率也变快了。每个节点既存放索引也存放数据，一般每个节点存放M个索引，对应有M+1棵子树，当要查询的索引到节点时，将节点中的索引和目标索引比较，来决定走哪颗子树，找到目标节点后把数据返回。这里就有一个弊端，每个节点包含索引+记录，用户记录数据的大小可能超过了索引数据，需要更多的IO操作来读到有用的索引数据，而且在查找过程中，也会读取没用节点的数据，不仅增多了IO次数也占用内存资源</p>
+<p><strong>为什么B+树要比B树适合</strong></p>
+<p>MySQL中的B+树比B树来说，它的非叶子节点不用存储数据而只存储索引数据，只有叶子节点才存储实际数据，而且在同层的非叶子节点和叶节点之间也会形成双向链表来帮助快速查找索引和记录。</p>
+<p>扩展一下，为什么不用hash，因为hash不适合做范围查询。</p>
+<h3 id="按字段个数分类"><a href="#按字段个数分类" class="headerlink" title="按字段个数分类"></a>按字段个数分类</h3><p><strong>联合索引</strong></p>
+<p>多个字段组成一个索引的索引称为联合索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create index index_id_name on user(id,name)</span><br></pre></td></tr></table></figure>
+
+<p>联合索引在B+树的非叶子节点中会存储两个字段来比较，当查询数据时，会先比较id在id相同的情况下再去比较name（B +树也是先按照id进行排序，然后在id相同时，按name字段比较），这就引出一个原则：最左匹配原则，按照最左优先的方式进行索引的匹配，使用联合索引进行查询的时候，不遵循最左匹配联合索引就会失效。</p>
+<p><strong>联合索引的范围查询</strong></p>
+<p>特殊情况：不是查询过程中用到了联合索引查询，就代表联合索引中的所有字段都用到了联合索引进行索引查询，存在部分字段用到了联合索引的B+Tree，部分字段没有用到联合索引的B+Tree情况。</p>
+<p>范围查询时，联合索引的最左匹配原则会一直向右匹配知道遇到范围查询就停止匹配。</p>
+<p><strong>比如</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from tbale where a &gt; 1 and b = 2;</span><br></pre></td></tr></table></figure>
+
+<p>这里因为联合索引中是先按照a字段的值来排序的，符合a&gt;1条件的索引记录肯定相邻，索引扫描时，会一直扫描到不符合a&gt;1的条件位置，所以a字段可以子啊联合索引的B+Tree中进行索引查询，但是在a&gt;1的记录范围内b字段的值是无序的。——&gt;只有a用到了联合索引进行查询，b没有用到。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table where a&gt;=1 and b = 2;</span><br></pre></td></tr></table></figure>
+
+<p>这个和上面的查询语句只有在a的取值范围上有所差异，但是其实索引的利用情况是一样的，还是只用到了a的索引，很多其他的文档中都会说在符合a&gt;&#x3D;1的二级索引记录中，，b无序，但是在a&#x3D;1的二级索引记录范围内b是有序的，再通过b&#x3D;2条件减少需要扫描的二级索引记录范围，然后得出结论，a,b字段都用到了联合索引，但是我实际用了一遍，发现其实并没有，a的查询范围加不加等号实际效果是一样的。</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251112154705437.png" alt="image-20251112154705437"></p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251112154751111.png" alt="image-20251112154751111"></p>
+<h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> a<span class="operator">&gt;</span><span class="number">1</span> <span class="keyword">and</span> b <span class="operator">=</span><span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个查询语句只a用到了联合索引，当查询到了值后，还要判断b的值是否满足了条件，在mysql5.6之前这些操作要回表判断，在主键索引上依次找到对应的数据再进行判断，但是mysql5.6之后就可以在联合索引遍历过程中，对联合索引中包含的字段先走出判断，过滤不满足的条件，减少了回表的次数，如果在extra列中出现了Using index condition就说明用到了索引下推的优化。</p>
+<h4 id="索引区分度"><a href="#索引区分度" class="headerlink" title="索引区分度"></a>索引区分度</h4><p>建立联合索引时，索引的顺序对效率影响很大，越靠前的字段呗用于索引过滤的概率越高，建立联合索引时，要吧区分度大的字段排在 前面，这样区分度大的字段就越有可能呗更多的SQL使用。</p>
+<p>区分度 &#x3D; distinct(column)&#x2F;count(*)[每个字段不同的column个数&#x2F;总行数]</p>
+<p>如果区分度很小，但是还是被建立了索引，那么这个时候查询优化器就会发生作用，如果这个值在表中的数据行中的百分比到达了30%，那就会忽略所有，采用全表扫描</p>
+<h4 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h4><ul>
+<li>前缀索引优化：用字段中字符串的前几个字符建立索引，这样可以减小索引字段大小，但是在order by 语句中无法使用前缀索引，也无法用作覆盖索引</li>
+<li>覆盖索引优化：索引列覆盖查询列的字段，减少回表操作</li>
+<li>主键索引最好是自增的：Innodb创建的主键索引默认是聚簇索引，数据存放在B+树上，同一个叶子节点中的数据是顺序存放的，当有新数据插入时，数据库将主键插入到对应节点，如果是自增的，插入新数据时，就只有追加操作，不需要移动其他数据进行调整，插入数据的效率就高了。</li>
+<li>防止索引失效：<ul>
+<li>模糊匹配时，like %xx 或者 like %xx%时索引失效</li>
+<li>对索引列做计算，函数，类型转换操作造成索引失效</li>
+<li>联合索引中没遵循最左匹配原则</li>
+<li>where自居中，or前是索引列，or后不是索引列，索引会失效</li>
+</ul>
+</li>
+</ul>
+<h5 id="如何排查索引是否生效"><a href="#如何排查索引是否生效" class="headerlink" title="如何排查索引是否生效"></a>如何排查索引是否生效</h5><p>explain语句中：</p>
+<ul>
+<li>possible_keys：字段可能用到的索引</li>
+<li>key：实际用到的索引，为NULL说明没有用索引</li>
+<li>key_len：索引的长度</li>
+<li>rows：扫描的数据行数</li>
+<li>type：数据扫描类型<ul>
+<li>ALL：全表扫描</li>
+<li>index:全索引扫描</li>
+<li>range：索引范围扫描</li>
+<li>ref：非唯一索引扫描</li>
+<li>eq_ref：唯一索引扫描，通常用户多表联查中</li>
+<li>const：结果只有一条的主键或唯一索引扫描，与常量进行比较</li>
+</ul>
+</li>
+<li>Extra<ul>
+<li>Using filesort：group by 语句中，无法利用索引完成排序操作，使用相应的排序算法进行，可能通过文件排序，效率低</li>
+<li>Using temporary：使用临时表保存中间结果，在对查询结果排序时使用了临时表，常见于order by 和分组查询group by</li>
+<li>Using index：表示用到了覆盖索引，避免了回表操作</li>
+</ul>
+</li>
+</ul>
+<h4 id="索引最好设置为NOT-NULL"><a href="#索引最好设置为NOT-NULL" class="headerlink" title="索引最好设置为NOT NULL"></a>索引最好设置为NOT NULL</h4><ul>
+<li>索引列存在NULL会导致优化器在做索引选择时更加复杂，NULL的列会让索引，索引统计和值的比较更复杂，在索引统计时，count会省略值为NULL的行</li>
+<li>NULL没意义但是占据物理空间</li>
+</ul>
+<h3 id="B-树的存储结构"><a href="#B-树的存储结构" class="headerlink" title="B+树的存储结构"></a>B+树的存储结构</h3><p>InnoDB的数据按照数据页为单位进行读写，当读取一条记录时，不是从磁盘中读取一条记录，而是读取一个数据页，一个数据页大小16KB。</p>
+<table>
+<thead>
+<tr>
+<th>文件头（38字节）File Header</th>
+<th>文件头表示页的信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>页头（56字节）Page Header</td>
+<td>页头，表示页的状态信息</td>
+</tr>
+<tr>
+<td>最大，最小记录（26字节）Infimun + Supremum</td>
+<td>表示页中的最小记录，最大记录</td>
+</tr>
+<tr>
+<td>用户记录（不确定）User Records</td>
+<td>存储行记录内容</td>
+</tr>
+<tr>
+<td>空闲空间（不确定） Free Space</td>
+<td>页中还没被使用的空间</td>
+</tr>
+<tr>
+<td>页目录（不确定） Page Directory</td>
+<td>存储用户记录的相对位置，对记录起到索引作用</td>
+</tr>
+<tr>
+<td>文件尾（8字节）File Trailer</td>
+<td>校验页是否完整</td>
+</tr>
+</tbody></table>
+<p><img src="D:\user\hexoBlog\pictures\image-20251115095150186.png" alt="image-20251115095150186"></p>
+<p>数据页中的记录按照主键顺序组成单向链表，链表结构导致其插入删除方便但是检索效率低，所以有了一个页目录，页目录会中会存储指针，每个指针指向每页的最后一个行记录</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251115101856347-1763433086334-1.png" alt="image-20251115101856347"></p>
+<p><strong>页目录创建过程</strong></p>
+<ol>
+<li>记录划分为几组，记录中包含最大记录和最小记录，不包含已删除记录</li>
+<li>每个记录组中最后一条记录就是组内最大的那条记录，最后一条记录中会存储这个存储组中一共存储了多少记录</li>
+<li>页目录存储每组最后一条记录的地址偏移量，地址偏移量按先后顺序存储起来，每组的地址偏移量也叫槽，每个槽相当指针指向了不同组的最后一个记录</li>
+</ol>
+<p>我们在查找记录时，通过二分法定位记录的位置，定义到后再遍历组内记录，为了避免遍历槽的操作退化成O(n)的时间复杂度，所以做出了如下的规定：</p>
+<ul>
+<li>第一个分组只有一条记录</li>
+<li>最后一条分组的记录条数在1-8之间</li>
+<li>剩下的分组的记录条数范围只能在4-8之间</li>
+</ul>
+<h3 id="B-树怎么进行查询"><a href="#B-树怎么进行查询" class="headerlink" title="B+树怎么进行查询"></a>B+树怎么进行查询</h3><p>B+树结构如下（这里我有点疑问，理论上B+树的非叶子节点间应该是没有双向指针的，我查资料也没找到这张图的出处，不知道为什么会有这张图，默认还是非叶子节点间没有指针指向）：</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251115102601800-1763433086334-2.png" alt="image-20251115102601800"></p>
+<p>InnoDB的B+树中每个节点都是一个数据页，不同的是非叶子节点中的数据页是页目录类型，只有叶子节点才会存储具体数据，当要查询数据时，会通过层层二分来找到最终记录组， 然后再遍历记录组找到目标数据。</p>
+<p><strong>聚簇索引二级索引</strong></p>
+<p>聚簇索引的叶子节点存储实际数据，完整的用户记录都存放在聚簇索引的叶子节点，二级索引的叶子节点存储的是主键值，表的数据都存放在聚簇索引的叶子节点里，InnoDB存储引擎一定会为表创建一个聚簇索引（有主键，默认使用主键作为索引，没有主键选择第一个不含NULL值的唯一列作为聚簇索引的索引键，都没有，InnoDB自动生成一个隐式自增id列作为聚簇索引的索引键），有且只有一个，为了避免重复存储。</p>
+<h3 id="MySQL单表数据不要超过2000w行？"><a href="#MySQL单表数据不要超过2000w行？" class="headerlink" title="MySQL单表数据不要超过2000w行？"></a>MySQL单表数据不要超过2000w行？</h3><p>一个B+树中可以存储的数据总数 &#x3D; x^(z-1)*y</p>
+<p>x:非叶子节点中指向其他页的数量</p>
+<p>y:叶子节点中能容纳的数据行树</p>
+<p>z:B+树的行数</p>
+<p>x:去除页中的除了存储数据的其他项的占用体积，剩下大约15K的存储空间，x &#x3D; 15 * 1024 &#x2F; (一条指针（记录主键与页号）的大小，12)12 &#x3D; 1280行</p>
+<p>y:存储数据的总体积大概也是15K，算一条数据1K 15*1024 &#x2F; 1000 &#x3D; 15</p>
+<p>Total &#x3D; 1028^(z-1) * 15</p>
+<p>z &#x3D; 2 —&gt; 19200</p>
+<p>z &#x3D; 3 —&gt; 2.45kw</p>
+<p>如果更多层可以存储更多的数据但是查询效率会很慢</p>
+<h3 id="哪种count-性能最好"><a href="#哪种count-性能最好" class="headerlink" title="哪种count()性能最好"></a>哪种count()性能最好</h3><p>结论：count(*) &#x3D; count(1) &gt; count(主键字段) &gt; count(字段)</p>
+<p><strong>count(主键字段)时</strong></p>
+<p>如果表中只有聚簇索引，那么InnoDB会循环遍历聚簇索引，将读取到的记录返回给server层，读取记录的id，判断主键值是否为null，不为NULL，count+1，但是有二级索引时，InnoDB不循环遍历聚簇索引而是二级索引，因为二级索引记录比聚簇索引记录占用更少空间</p>
+<p><strong>count(1)时</strong></p>
+<p>和count(主键字段)的过程基本差不多，不同的是它不用去判断NULL，只要统计记录的数量就可以了，理论上比count(主键字段)要快</p>
+<p><strong>count(*)时</strong></p>
+<p>在执行count(*)时，MySQL会把其等价为count(0)这就和count(1)的效果是一样的了</p>
+<p><strong>count(字段)</strong></p>
+<p>不用二级索引，采用全表扫描</p>
+<p>用二级索引，还要有回表操作—&gt;所以效果最差</p>
+<p><strong>比较MyISAM和InnoDB</strong></p>
+<p>MyISAM会为每张表维护一个meta，里面存储了row_count值，表级锁会保证数据一致性，直接读取row_count就是count()函数的执行结果。</p>
+<p>但是InnoDB还支持事务，由于MVCC的原因应该返回多少行数据不确定无法维护一个row_count变量，所以需要遍历操作，但是当加上where加上条件语句后就一样了。</p>
+<p><strong>优化count(*)</strong></p>
+<p>使用explain去估算记录总数</p>
+<p>额外表保存计数值，增删改时对应去维护这张表</p>
+<h3 id="MySQL分页优化"><a href="#MySQL分页优化" class="headerlink" title="MySQL分页优化"></a>MySQL分页优化</h3><p>一般的分页语句：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> id limit <span class="keyword">offset</span>,size;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> id limit <span class="number">0</span>, <span class="number">10</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> id limit <span class="number">10000</span>,<span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上面这两个的查询效率一样吗？</p>
+<p>答：不一样。在执行第一条语句时，server层会调用innodb的接口，在innodb中获取完整数据，返回server层，返回客户端。</p>
+<p>如果offset的值过大，比如offset &#x3D; 100000时，那就会获取100000 + 10条数据，再返回给server层，然后server层会根据offset的值逐个抛弃，最后只留下10条数据，放到server层的结果集中，返回给客户端。</p>
+<p>所以第二条语句的执行效率明显不如第一条。</p>
+<p>那么怎么优化？</p>
+<p>这里是把全部数据都加载到了server层后进行数据的排查，可以先进行id的筛选后再把需要的数据返回</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page <span class="keyword">where</span> id <span class="operator">&gt;=</span>(<span class="keyword">select</span> id <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> id limit <span class="number">100000</span>,<span class="number">1</span>) <span class="keyword">order</span> <span class="keyword">by</span> id limit <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这条sql语句会先查询到100000+1条数据，但是只含id一列数据，然后server会抛弃前100000条数据只留下最后一个用作去比较操作，最后再取出10条数据。</p>
+<p><strong>上面说的是基于主键索引的limit执行操作，基于非主键索引的limit执行操作是什么样的？</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> user_name limit <span class="number">0</span>,<span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<p>相比较基于主键索引的limit操作，非主键的多了要回表的消耗，甚至有可能会变成全表扫描，优化：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> page t1,(<span class="keyword">select</span> id <span class="keyword">from</span> page <span class="keyword">order</span> <span class="keyword">by</span> user_name limit <span class="number">1000000</span>,<span class="number">100</span>)t2 <span class="keyword">where</span> t1.id <span class="operator">=</span> t2.id;</span><br></pre></td></tr></table></figure>
+
+<p>先通过select id from page order by user_name limit 100000 100 覆盖索引去查找100个id后，去跟主表id做匹配，就绕开了完整的100000*数据的回表</p>
+<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><p>当需要获取全表的数据时，如果采用”select * from page”去查找，那一定会超时，所以一般会想到limit offset size去查找，当offset变得很大后就变成了深度分页问题，</p>
+<p>解决方案：可以根据id主键去排序，分批次取，将当前批次的最大id作为下次筛选条件的进行查询。</p>
+<p><strong>分页展示</strong></p>
+<p>如果是分页展示，那基本offset的值不会太大，要做搜索或者筛选类的页面就可以不用mysql了，用es同时也要控制展示的结果数，也可以控制页面只做下一页上一页的操作按钮，这样就可以用上面的分批获取方案了。</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><h4 id="事务特性"><a href="#事务特性" class="headerlink" title="事务特性"></a>事务特性</h4><ul>
+<li>原子性：一个事务中的操作要么全完成要么都不完成。通过undo log（回滚日志）保证</li>
+<li>一致性：事务操作前后，数据满足完整性约束，数据库保持一致性状态。通过原子性，隔离性，持久性保证。</li>
+<li>隔离性：数据库允许多个并发事务同时对其数据进行读写和修改的能力，防止多个事务并发执行，由于交叉执行而导致数据的不一致，每个事务在执行时有相对独立的数据空间，不会对其他事务产生干扰。通过MVCC或锁机制来保证</li>
+<li>持久性：事务处理结束后，对数据的修改是永久的，系统故障也不会丢失。通过redo log（重做日志）保证</li>
+</ul>
+<h4 id="并发问题"><a href="#并发问题" class="headerlink" title="并发问题"></a>并发问题</h4><p><strong>脏读</strong>：一个事务读到了另一个未提交事务修改后的数据。读已提交的隔离级别可以解决</p>
+<p><strong>不可重复读</strong>：一个事务内多次读取同一是数据出现前后数据不一样的情况，意味发生了不可重复读。可重复读的隔离级别可以解决</p>
+<p><strong>幻读</strong>：一个事务内多次查询某个符合查询条件的记录数量，如果出现前后两次查询到的记录数量不一样的情况，就代表发生了幻读。串行化的隔离级别可以解决。</p>
+<hr>
+<p><strong>MySQL InnoDB引擎默认隔离级别是可重复读，通过以下两个方案可以解决幻读问题</strong></p>
+<ul>
+<li>针对快照读（普通select语句），通过MVCC方式解决幻读，事务执行过程中看到的数据一定是和事务启动时看到的数据是一致的，即使有其他事务插入也查询不到这个数据</li>
+<li>针对当前读，通过next-key lock方式解决幻读问题，执行select……for update时，会加上next-key lock，如果有其他事务在next范围内插入了一条记录，就会被阻塞，无法插入。</li>
+</ul>
+<p><strong>事务的实现方式</strong></p>
+<ul>
+<li>读未提交：直接读取最新的数据</li>
+<li>串行化：加读写锁的方式来避免并行访问</li>
+<li>读提交和可重复读：通过Read View实现，但是两者创建Read View的时机不同，读提交会在每个语句执行前生成一个Read View，可重复读是只在每个事务启动时生成一个Read View，整个事务期间都只用这个Read View</li>
+</ul>
+<p>PS：开始事务≠启动事务，MySQL有以下两种开启事务的命令：</p>
+<ul>
+<li>begin&#x2F;start transaction：执行了这个命令后，不代表启动了事务，在这个命令后执行的第一条select语句才是真正开启事务的时机。</li>
+<li>start transaction with consistent snapshot：执行后马上启动事务。</li>
+</ul>
+<h4 id="Read-View在MVCC（多版本并发控制）中如何工作"><a href="#Read-View在MVCC（多版本并发控制）中如何工作" class="headerlink" title="Read View在MVCC（多版本并发控制）中如何工作"></a>Read View在MVCC（多版本并发控制）中如何工作</h4><p>ReadView组成:</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251116083429874.png" alt="image-20251116083429874"></p>
+<p>根据之前的学习我们已经知道了InnoDB存储引擎中，聚簇索引记录中含有如下两个隐藏列：</p>
+<ul>
+<li>trx_id：记录最后一个对该记录进行修改的事务id</li>
+<li>roll_pointer：对聚簇索引记录修改时，旧版本写道undo日志中，这个指针指向旧版本记录。</li>
+</ul>
+<p>根据Read View 和 两个隐藏列就可以实现MVCC了</p>
+<ul>
+<li>trx_id&lt;min_trx_id：这个版本的记录对当前事务是可见的</li>
+<li>trx_id&gt;max_trx_id：这个版本的记录对当前事务不可见，要通过roll_pointer回溯</li>
+<li>trx_id在min_trx_id和max_trx_id之间：<ul>
+<li>trx_id在m_ids中，代表修改了这个事务的记录还活跃，该版本记录对当前事务不可见</li>
+<li>trx_id不在m_ids中，该版本记录以及被提交，可见</li>
+</ul>
+</li>
+</ul>
+<h5 id="为什么MVCC不能完全避免幻读现象"><a href="#为什么MVCC不能完全避免幻读现象" class="headerlink" title="为什么MVCC不能完全避免幻读现象"></a>为什么MVCC不能完全避免幻读现象</h5><p>我们刚才的例子中忽略了如果查询的记录是不存在的情况，如果现在事务A查询了一条不存在的事务，然后在这个期间，事务B向数据库中插入了这条新的事务，那么事务A就会执行update，把数据更新到数据库中，同时，这条记录的trx_id也就变成了A的事务id，然后再去查询时，这条数据就会变成可见的了，造成了幻读。</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251116090047238.png" alt="image-20251116090047238"></p>
+<p>另外一个幻读常见：</p>
+<p>先快照读再执行当前读</p>
+<ul>
+<li>T1：事务A：select * from table where id &gt; 100</li>
+<li>T2：事务B：insert into table values(200) commit</li>
+<li>T3：执行当前读：select * from table where id &gt; 100 for update得到了和T1时刻不同的数据数量</li>
+</ul>
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><img src="D:\user\hexoBlog\pictures\image-20251116091458336.png" alt="image-20251116091458336" style="zoom:200%;" />
+
+<h4 id="锁-1"><a href="#锁-1" class="headerlink" title="锁"></a>锁</h4><p>锁的类型分为</p>
+<ul>
+<li>行锁</li>
+<li>表锁</li>
+<li>共享锁</li>
+<li>排他锁</li>
+<li>间隙锁</li>
+<li>临键锁</li>
+<li>…………</li>
+</ul>
+<ol>
+<li>乐观锁：在进行update操作时，要对版本进行控制和校验，一般可以采用时间戳来进行分别</li>
+<li>悲观锁：怎么添加悲观锁，select …… for update ，lock in share mode</li>
+</ol>
+<h5 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h5><p>怎么检查查看死锁？<br>输入命令show engine innodb status 查看查询到的文本中的latest decected deadlock</p>
+<p>怎么预防和解决死锁？</p>
+<ol>
+<li>手动终止阻塞线程，show processlist  然后 kill thread_id</li>
+<li>启动死锁检测：innodb_deadLock_detect &#x3D; on</li>
+</ol>
+<p><strong>全局锁</strong></p>
+<p>加锁：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush tables <span class="keyword">with</span> read lock</span><br></pre></td></tr></table></figure>
+
+<p>执行后数据库处于只读状态，其他操作会被阻塞</p>
+<p>对数据的增删改操作，对表结构的更改操作，alter table ,drop table等语句</p>
+<p>释放锁：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unlock tables</span><br><span class="line"># 注意这里的tables不是表名的统称，是只要输入上面的代码就可以释放锁，即使不释放锁，会话断开后，全局锁也会被自动释放</span><br></pre></td></tr></table></figure>
+
+<p>全局锁主要应用在全库逻辑备份，在备份数据库期间不会更新数据和表结构，但是加了全局锁会导致备份数据期间业务只能读数据不能修改数据，但是如果存储引擎支持的事务是可重复读级别的，在备份数据库前开启事务，先创建Read View，基于MVCC就可以实现备份数据的同时也可以更新数据。</p>
+<p>备份数据库的工具是mysqldump，在使用mysqldump时加上：-single-transaction参数就可以在备份数据库前开启事务。</p>
+<p>以下操作只适合于InnoDB的存储引擎</p>
+<p>怎么备份数据库？在cmd或者powshell中执行下面的命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysqldump <span class="operator">-</span>u root <span class="operator">-</span>p密码 <span class="comment">--single-transaction mytest &gt; 指定文件地址</span></span><br></pre></td></tr></table></figure>
+
+<p>恢复数据库操作：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">-</span>u root <span class="operator">-</span>p密码 mytest <span class="operator">&lt;</span> 刚才指定的文件地址</span><br></pre></td></tr></table></figure>
+
+<p><strong>表级锁</strong></p>
+<ul>
+<li><p>表锁</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 表级别的共享锁——读锁，阻止其他会话做写操作</span><br><span class="line">lock tables 表名 read</span><br><span class="line"># 表级别的排他锁——写锁，阻止其他会话进行任何操作</span><br><span class="line">lock tables 表名 write</span><br><span class="line"></span><br><span class="line"># 释放锁</span><br><span class="line">unlock tables</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>表锁不止会限制其他线程的读写操作，也会限制本线程的读写操作，如果是read锁，其他线程的写操作会因为锁的原因而阻塞，本线程如果进行写操作则会直接报错提示当前处于读锁状态不能进行写操作。本线程也不能读取其他表，但是其他线程可以访问其他表。</p>
+<p>加独占锁&#x2F;排他锁的效果类似，当你给锁加上写锁后，这个会话就针对加了锁的表进行写操作，而不能执行读操作，其他会话线程则是什么针对这张表的操作都不能进行,测试流程：</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">lock tables test write; # 先加一个独占锁</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> test <span class="keyword">set</span> b <span class="operator">=</span> <span class="number">1</span> <span class="keyword">where</span> a <span class="operator">=</span> <span class="number">1</span>; # 测试写功能</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">from</span> test; # 测试查询功能</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student; # 测试能否查询其他表</span><br><span class="line"></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">open</span> tables <span class="keyword">where</span> in_use <span class="operator">&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">unlock tables</span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">OPEN</span> TABLES <span class="keyword">WHERE</span> In_use <span class="operator">&gt;</span> <span class="number">0</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>PS：测试查询功能时会陷入阻塞状态，如果手动终止线程，也会同时终止这个会话，那锁就也自动释放了</strong></p>
+<p>共享表（S）锁：禁止别人获得X行锁</p>
+<p>排他锁（X）锁：禁止别人获得（S，X）锁</p>
+<ul>
+<li><p>元数据锁（MDL）</p>
+<p>元数据锁不需要显示调用，当对数据进行CRUD时，加MDL读锁，对表结构修改时，加MDL写锁，读写和写写锁不能同时存在，当执行crud操作时，主动申请MDL读锁，如果这个时候其他线程申请了MDL写锁，就会阻塞直到读锁被释放，反之亦然。MDL一般在事物结束后释放，但是如果有一个长事物呢?<br>A线程进行CRUD，加上读锁</p>
+<p>B线程也CRUD，加上读锁，<br>这时C来了，它要申请写锁就必须等待A和B结束后才能申请，因此被阻塞，C之后的线程因为C被阻塞也申请不到了锁（申请锁的线程会形成一个队列，写锁获取优先级高于读锁），尤其是如果有大量的申请读锁的线程就会造成资源的浪费。</p>
+</li>
+<li><p>意向锁</p>
+<p>在用InnoDB引擎的表里对某些记录加上共享锁之前先在表级别加一个[意向共享锁]</p>
+<p>在用InnoDB引擎的表里对某些记录加上排他锁之前先在表级别加一个[意向排他锁]</p>
+<p>在增删改操作时，先加[意向排他锁]再加独占锁，普通的select不加行级锁，普通的select语句利用MVCC实现一致性读写，无锁。但是也可以通过以下的方式加共享锁和独占锁：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#先在表上加意向共享锁，再对读取的记录加共享锁</span><br><span class="line"><span class="keyword">select</span> …… lock <span class="keyword">in</span> share mode;</span><br><span class="line">#先在表上加意向独占锁，再对读取的记录加独占锁 </span><br><span class="line"><span class="keyword">select</span> …… <span class="keyword">for</span> <span class="keyword">update</span></span><br></pre></td></tr></table></figure>
+
+<p>意向锁是表级锁，不会和行级锁发生冲突，意向锁之间也不会发生冲突，只会和共享表锁(lock tables …… read) 和 独占表锁(lock tables …… write)发生冲突。</p>
+<p>如果没有意向锁，加独占表锁时，就要遍历表中所有记录，检查是否存在独占锁，有了之后，在对记录加独占锁前，就会先加表级意向独占锁，在加独占表锁时，会直接检查该表是否有意向独占锁，有以为着表里已经加了独占锁，不用去遍历了。</p>
+<p>意向锁的作用：快速判断表里是否已经有记录被加了锁，这方便判断能不能给整张表加锁，如果表里有行被锁了，就不能加表锁必须等行锁被释放了才可以加锁。</p>
+</li>
+<li><p>AUTO-INC锁</p>
+<p>表中的主键被设置为自增的，是通过对主键字段声明AUTO_INCREMENT属性实现的，在插入新数据时可以不指定主键的值，数据库自动给主键赋值，通过AUTO_INC锁实现。</p>
+<p>加锁和释放锁的时机：</p>
+<p>插入语句执行后立即释放，插入时加锁。</p>
+<p>MySQL5之后，InnoDB提供了一种轻量级的锁来实现自增，插入数据时，被AUTO_INCREMENT修饰的字段加上轻量级锁，然后该字段赋值一个自增的值，然后锁被释放，不需要等待整个插入语句执行完后才释放锁。详细：[<a target="_blank" rel="noopener" href="https://xiaolincoding.com/mysql/lock/mysql_lock.html#auto-inc-%E9%94%81:~:text=InnoDB%20%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E6%8F%90%E4%BE%9B%E4%BA%86%E4%B8%AA,%E5%8F%A5%E7%BB%93%E6%9D%9F%E5%90%8E%E6%89%8D%E8%A2%AB%E9%87%8A%E6%94%BE%EF%BC%9B]">https://xiaolincoding.com/mysql/lock/mysql_lock.html#auto-inc-%E9%94%81:~:text=InnoDB%20%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E6%8F%90%E4%BE%9B%E4%BA%86%E4%B8%AA,%E5%8F%A5%E7%BB%93%E6%9D%9F%E5%90%8E%E6%89%8D%E8%A2%AB%E9%87%8A%E6%94%BE%EF%BC%9B]</a></p>
+</li>
+</ul>
+<p><strong>行级锁</strong></p>
+<p>InnoDB支持行级锁，MyISAM不支持行级锁。</p>
+<p>普通的select语句不会对记录加锁，可以通过以下方式在查询时加锁，查询被加锁的语句称为锁定读</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 对读取的记录加共享锁</span><br><span class="line"><span class="keyword">select</span> …… lock <span class="keyword">in</span> share mode;</span><br><span class="line"># 对读取的记录加排他锁</span><br><span class="line"><span class="keyword">select</span> …… <span class="keyword">for</span> <span class="keyword">update</span></span><br></pre></td></tr></table></figure>
+
+<p>PS：事务提交锁被释放，在使用这两种语句时，必须加上begin、start transaction或者set autocommit &#x3D; 0</p>
+<p><strong>行级锁主要有三类</strong></p>
+<ul>
+<li>Record Lock，记录锁，仅仅把一条记录锁上<ul>
+<li>共享锁S，SS兼容，SX不兼容</li>
+<li>排他锁X，XS不兼容，XX不兼容</li>
+</ul>
+</li>
+<li>Gap Lock，间隙锁，锁定一个范围，不包含记录本身。间隙锁 之间兼容，两个事务可以同时持有包含共同间隙范围的间隙锁，不存在互斥关系。</li>
+<li>Next-Key Lock：临键锁，上面两个锁的组合，锁一个范围，且锁记录本身。</li>
+</ul>
+<p>InnoDB的next-key lock覆盖满足：</p>
+<p>区间连续覆盖，不留空隙</p>
+<p>锁结构：(-无穷,r1],(r1,r2],……</p>
+<p>或者退化成(-无穷,r1],(r1,r2),(r2,r3)</p>
+<h2 id="MySQL怎么加锁的"><a href="#MySQL怎么加锁的" class="headerlink" title="MySQL怎么加锁的"></a>MySQL怎么加锁的</h2><p>InnoDB引擎才支持行级锁，MyISAM是不支持的，以下场景都基于InnoDB引擎。</p>
+<p>普通的select语句不会加锁，如果是锁定读可以通过以下两种方式加锁：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 加共享S锁</span><br><span class="line"><span class="keyword">select</span> …… lock <span class="keyword">in</span> share mode;</span><br><span class="line"># 加排他X锁</span><br><span class="line"><span class="keyword">select</span> …… <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+
+<p>事务提交锁被释放，除了锁定读的语句，update和delete语句也会自动加独占锁（所以当一个记录被X锁锁了后，其他事务就不能对这个记录进行相关操作了，相当于另外的事务也要在这个记录上加X锁，这是不兼容的）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>X</th>
+<th>S</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X</td>
+<td>不兼容</td>
+<td>不兼容</td>
+</tr>
+<tr>
+<td>S</td>
+<td>不兼容</td>
+<td>兼容</td>
+</tr>
+</tbody></table>
+<p>之前的知识提到了，行级锁分为三类：</p>
+<ul>
+<li>Record Lock：记录锁，仅加在一条记录锁上<ul>
+<li>S型记录锁，具体可以参考表级别的S锁</li>
+<li>X型记录锁，同上</li>
+</ul>
+</li>
+<li>Gap Lock：间隙锁，锁定一个范围<ul>
+<li>间隙锁之间是兼容的，两个事务可以同时持有相同间隙范围 的间隙锁，不存在互斥，因为间隙锁主要是为了防止幻读。</li>
+</ul>
+</li>
+<li>Next-Key Lock：上面两种锁的组合，锁范围也锁本身记录。所有，一个事务获取了X型的锁，另一个事务在获取同范围的X锁时会被阻塞。</li>
+</ul>
+<h3 id="MySQL是怎么加行级锁的？"><a href="#MySQL是怎么加行级锁的？" class="headerlink" title="MySQL是怎么加行级锁的？"></a>MySQL是怎么加行级锁的？</h3><p>加锁的对象是索引，加锁的基本单位是next-key lock，next-key lock前开后闭区间，间隙锁是前开后开区间。</p>
+<p><strong>唯一索引（主键索引）等值查询</strong></p>
+<ul>
+<li>查询的记录存在时，在索引树上定位到了这条记录后，next-key lock会退化成[记录锁]</li>
+<li>查询的记录不存在时，在索引树上找到第一条大于该记录的记录后，next-key lock退化成[间隙锁]</li>
+</ul>
+<p><strong>二级索引</strong></p>
+<p>在锁定读查询时，除了会对二级索引（如果二级索引是唯一索引，加锁规则和主键索引的加锁规则相同）项加行级锁，还会对相关主键也加[记录锁]</p>
+<p>ps：select * form performance_schema.data_locks可以查看事务执行SQL过程中加了什么锁</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251117102927774.png" alt="image-20251117102927774"></p>
+<p>可以通过查看Lock_MODE来确定加的是什么锁。</p>
+<ul>
+<li>如果Lock_MODE是X：next-key锁</li>
+<li>如果是X,REC_NOT_GAP：记录锁</li>
+<li>如果是X,GAP：间隙锁</li>
+</ul>
+<p>记录存在时，next-key lock 会退化成记录锁，为什么会退化，因为这个时候仅靠记录锁就能排除幻读的问题，幻读主要是前后两次获取的结果集不同，但是如果已经存在了主键，其他事务是不可能再插入的，而对目标记录加了记录锁，其他事务也不能删除该记录</p>
+<p>记录不存在时，next-key lock 会退化成间隙锁。如果记录中已经有了主键1，5，6，7时，查询关于2的记录就会形成一个范围为(1,5)的间隙锁，退化成间隙锁的原因和上面相同，只靠间隙锁就可以解决幻读问题，只要确保其他事务不能在这个间隙中插入新数据就可以了。</p>
+<p>ps：不存在的数据也无法加记录锁，因为锁加在索引上，没有索引怎么加。</p>
+<h4 id="唯一索引（主键索引）范围查询"><a href="#唯一索引（主键索引）范围查询" class="headerlink" title="唯一索引（主键索引）范围查询"></a><strong>唯一索引（主键索引）范围查询</strong></h4><p>针对唯一索引进行范围查询时，会对每个扫描到的索引加next-key锁，遇到下面情况退化</p>
+<ul>
+<li>大于等于的范围查询，存在等值查询的条件，如果等值查询的记录存在于表，该记录的索引中的next-key退化成记录锁。</li>
+<li>小于或小于等于的范围查询<ul>
+<li>当条件值的记录不在表中，扫描到终止范围查询的记录时，该记录的索引的next-key锁退化成间隙锁，其他加next-key锁</li>
+<li>当条件值的记录在表中，如果是小于条件，扫描到终止范围查询的记录时，该记录的next-key退化成间隙锁，其他加next-key锁，小于等于条件，不会退化，都加next-key锁</li>
+</ul>
+</li>
+</ul>
+<h5 id="1、针对-大于或者大于等于-的范围查询"><a href="#1、针对-大于或者大于等于-的范围查询" class="headerlink" title="1、针对[大于或者大于等于]的范围查询"></a>1、针对[大于或者大于等于]的范围查询</h5><p><strong>大于情况</strong></p>
+<p>执行select * from table where id &gt; 15 for update时</p>
+<p>事务的加锁过程：</p>
+<ol>
+<li>开始要找到最后一个符合的数（假设是）20，对该范围加一个(15,20]的next-key锁</li>
+<li>因为是范围查询，继续向后查找，发现20是最后一个符合的记录，在innodb引擎中，用一个特殊的记录来标记最后一条记录，该记录叫supremum pseudo-record，扫描第二行时，也会扫描到这个记录，对主键索引加范围为(20,+无穷)</li>
+<li>停止扫描</li>
+</ol>
+<p>之后就如要插入16—19的记录会被锁阻塞，同理也插入不了大于20的数据</p>
+<p><strong>大于等于的情况</strong></p>
+<ol>
+<li>开始要找到的是第一行id&#x3D;15的记录，等值查询，该主键索引的next-key锁退化成记录锁，锁住id &#x3D; 15这行数据</li>
+<li>范围查找，继续向后查找，找到第二行是id &#x3D; 20，对该主键加范围(15,20]的next-key锁</li>
+<li>扫到特殊标记，加一个(20,+无穷)的next-key锁</li>
+</ol>
+<h5 id="2、针对-小于或者小于等于-的范围查询"><a href="#2、针对-小于或者小于等于-的范围查询" class="headerlink" title="2、针对[小于或者小于等于]的范围查询"></a>2、针对[小于或者小于等于]的范围查询</h5><p><strong>针对小于范围查询时，查询条件值的记录不存在表中的情况</strong></p>
+<p>加锁变化过程：select * from tables where id &lt; 6</p>
+<ol>
+<li>查找小于表中存在的最小小于目标值的记录（假设是1），对该主键加(负无穷，1]的next-key锁</li>
+<li>范围查找，继续向后查找存在的记录，扫描到第二行的id是5，对该主键索引加范围为(1,5]的next-key锁</li>
+<li>扫描到的记录id&#x3D;5还是满足id&lt;6条件的记录，继续扫描到不符和条件的记录</li>
+<li>扫描到id&#x3D;10，不符和，id &#x3D; 10的记录的锁退化成间隙锁，范围为：(5,10)</li>
+<li>扫描到不符和条件的记录，停止扫描</li>
+</ol>
+<p>所以一共加了三个锁：</p>
+<p>(-无穷，1]的next-key锁，阻止在小于1的范围中加入新的锁</p>
+<p>(1,5]的next-key锁，</p>
+<p>(5,10)的间隙锁</p>
+<p><strong>针对小于等于的范围查询时，查询条件值的记录[存在]表中的情况</strong></p>
+<p>加锁过程：select * from table where id &lt; &#x3D;5;</p>
+<ol>
+<li>开始要找的第一行id &#x3D; 1，加(-无穷,1]的next-key锁</li>
+<li>范围查找，继续往后查找存在的记录，扫到id &#x3D; 5，在(1,5]加next-key锁</li>
+<li>主键索引唯一性，不会有两个id &#x3D; 5的记录，停止扫描</li>
+</ol>
+<p>为什么这里不像大于等于的那样，id&#x3D;5的索引从next-key lock退化成记录锁，因为如果这样退化，锁结构就变成了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(-无穷,1] next-key</span><br><span class="line">(1,5) gap</span><br><span class="line">5 record</span><br></pre></td></tr></table></figure>
+
+<p>左侧next-key的gap覆盖到1，中间有gap，右边只有record lock 没有对应的next key 或者gap 不连续，锁空间不合法</p>
+<p>总结：查找都是从左向右查找</p>
+<p>id : {1,4,6,15,20,36,39,56……}</p>
+<p>select * from table where id &gt; 15</p>
+<p>select * from table where id &gt;&#x3D;15</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>边界存在</th>
+<th>边界不存在</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>大于</td>
+<td>(-∞,15]<br />next-key:(15,20]<br />(20,+∞]</td>
+<td>(-∞,15]<br />next-key:(15,20]<br />(20,+∞]</td>
+</tr>
+<tr>
+<td>大于等于</td>
+<td>id&#x3D;15的记录锁<br />next-key:(15,20]<br />next-key:(20,+∞]</td>
+<td>next-key:(15,20]<br />next-key:(20,+∞]</td>
+</tr>
+</tbody></table>
+<p>id:{1,5,10,18,19,40……}</p>
+<p>select * from table where id &lt; 6 for update</p>
+<p>select * from table where id &lt;&#x3D; 6 for update</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>边界存在</th>
+<th>边界不存在</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小于</td>
+<td>(-∞,1]<br />(1,5]<br />gap:(5,10)</td>
+<td>(-∞,1]<br />(1,5]<br />gap:(5,10)</td>
+</tr>
+<tr>
+<td>小于等于</td>
+<td>(-∞,1]<br />(1,5]</td>
+<td>(-∞,1]<br />(1,5]<br />gap:(5,10)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>大于等于的范围查询，存在等值查询的条件，如果等值查询的记录存在于表，该记录的索引中的next-key退化成记录锁。</li>
+<li>小于或小于等于的范围查询<ul>
+<li>当条件值的记录不在表中，扫描到终止范围查询的记录时，该记录的索引的next-key锁退化成间隙锁，其他加next-key锁</li>
+<li>当条件值的记录在表中，如果是小于条件，扫描到终止范围查询的记录时，该记录的next-key退化成间隙锁，其他加next-key锁，小于等于条件，不会退化，都加next-key锁</li>
+</ul>
+</li>
+</ul>
+<h4 id="非唯一索引等值查询"><a href="#非唯一索引等值查询" class="headerlink" title="非唯一索引等值查询"></a>非唯一索引等值查询</h4><p>在用非唯一索引等值查询时，因为存在两个索引，一个主键索引一个非主键索引，在加锁时要同时对这两个索引加锁，在对主键索引加锁时，只有满足查询条件的记录才会对他们的主键家索引。</p>
+<p>查询的记录不存在时的加锁规则：</p>
+<ul>
+<li>当查询的记录存在时，由于不是唯一索引，存在索引值相同的记录，非唯一索引等值查询的过程是一个扫描的过程，直到扫描到第一个不符合条件的二级索引记录就停止扫描，在扫描过程中，对扫描到的二级索引记录家next-key锁，第一个不符合条件的二级索引记录，该索引的next-key锁退化成间隙锁，符合条件的主键索引加记录锁</li>
+<li>当查询的记录不存在时，扫描到第一个不符合的二级索引记录，该二级索引的next-key锁会退化成间隙锁，不满足查询条件不给主键加锁</li>
+</ul>
+<p>非唯一索引等值查询时，能否插入新的值不仅要看二级索引的锁范围，还要看主键值。</p>
+<p>如果二级索引的next-key 锁是(20,24]，那有些时候，二级索引为20的值也可以插入，比如新的数据的主键id小于原来二级索引值为20的id，那这个新数据就不被包含在锁的范围内了。同理，24也是</p>
+<h4 id="非唯一索引范围查询"><a href="#非唯一索引范围查询" class="headerlink" title="非唯一索引范围查询"></a>非唯一索引范围查询</h4><p>非唯一索引和主键索引的范围查询的加锁也有所不同，不同之处在于非唯一索引范围查询，索引的 next-key lock 不会有退化为间隙锁和记录锁的情况，也就是非唯一索引进行范围查询时，对二级索引记录加锁都是加 next-key 锁。</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251118083500240.png" alt="image-20251118083500240"></p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251118084526599.png" alt="image-20251118084526599"></p>
+<h5 id="为什么update没加索引会锁全表"><a href="#为什么update没加索引会锁全表" class="headerlink" title="为什么update没加索引会锁全表"></a>为什么update没加索引会锁全表</h5><p>执行update语句时，会对记录加上独占锁，如果其他事务对持有独占锁的记录进行修改会被阻塞，InnoDB事务中，对记录加锁的基本单位是next-key锁，有时会退化为间隙锁或者记录锁。如果在update语句中where没有使用索引，相当于全表扫描，对所有记录都加上了next-key Lock，整个表都会被锁住，也就造成了整个表的阻塞。</p>
+<p><strong>避免：将sql_safe_updates的参数设置为1规定以下行为</strong></p>
+<ul>
+<li>update语句<ul>
+<li>使用where，where条件中必须有索引</li>
+<li>使用limit</li>
+<li>同时使用where和limit，where条件中可以没有索引列</li>
+</ul>
+</li>
+<li>delete语句<ul>
+<li>同时使用where和limit，where条件中可以没有索引列</li>
+</ul>
+</li>
+</ul>
+<h4 id="MySQL死锁了怎么解决"><a href="#MySQL死锁了怎么解决" class="headerlink" title="MySQL死锁了怎么解决"></a>MySQL死锁了怎么解决</h4><h4 id="为什么会有死锁产生"><a href="#为什么会有死锁产生" class="headerlink" title="为什么会有死锁产生"></a>为什么会有死锁产生</h4><p>Innodb存储引擎为了解决可重复读隔离级别下的幻读问题，引出next-key锁。</p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251118092246116.png" alt="image-20251118092246116"></p>
+<p>如上图中，事务A在二级索引上加的是X型的next-key锁，锁范围：(10086,+<strong><code>∞</code></strong>)</p>
+<p>事务B执行插入语句时，就会在插入间隙上获取插入意向锁，插入意向锁和间隙锁冲突，当其他事务持有该间隙的间隙锁时，要等其释放间隙锁才能获取插入意向锁，间隙锁又是兼容的，两个事务的select…… for update语句不会相互影响（这里是因为**<code>∞</code>**不是真实记录，不需要考虑X和S的关系，不然在for update阶段B就会因为获取不到锁阻塞了）。</p>
+<p><strong>什么是插入意向锁</strong></p>
+<p>插入意向锁是一种特殊的间隙锁，不锁范围锁一个点。插入意向锁不会像其他的间隙锁一样是兼容的，如果想要在间隙锁的范围内获取插入意向锁是会发生阻塞的。</p>
+<p>每插入一条新记录，都要查看带插入记录的下一条记录是否已经被加了间隙锁，被加了间隙锁就会形成一个插入意向锁，锁的状态设为等待状态。</p>
+<p>insert语句正常执行时不会有锁结构，通过聚簇索引自带的trx_id列作为隐式锁来保护记录。</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p>什么是隐式锁</p>
+<p>事务需要加锁时，如果这个锁不可能发生冲突， innodb跳过加锁阶段，这种机制叫隐式锁，延迟加锁机制，只有在可能发生冲突时才加锁，减少锁的数量。</p>
+</blockquote>
+<p><strong>遇到唯一键冲突</strong></p>
+<p>插入新记录时，发现已经有主键或者unique二级索引相同的记录了，插入失败，对这个记录加S型的锁</p>
+<ul>
+<li>主键索引重复，给已经存在的主键值重复的聚簇索引记录加S型记录锁。</li>
+<li>unique二级索引重复，插入新记录的事务给已经存在的二级索引类重复的二级索引记录添加S型next-key锁。</li>
+</ul>
+<p><strong>执行相同Insert语句的场景</strong></p>
+<p><img src="D:\user\hexoBlog\pictures\image-20251118093838815.png" alt="image-20251118093838815"></p>
+<ul>
+<li>A先插入10086的数据，插入成功，此时被隐式锁保护，没有实际锁结构</li>
+<li>B也插入10086数据，，二级索引遇到已经存在的二级唯一索引，B就会想获取一个S锁，A此时还未提交，A中的隐式锁会变成显示锁，X型记录锁，阻塞B的获取S锁，B进入阻塞状态</li>
+</ul>
+<hr>
+<h5 id="如何避免死锁"><a href="#如何避免死锁" class="headerlink" title="如何避免死锁"></a>如何避免死锁</h5><p>死锁条件：互斥，占有且等待，不可强占用，循环等待</p>
+<ul>
+<li>设置事务等待锁的超时时间：参数innodb_lock_wait_timeouot：超时时间</li>
+<li>主动开启死锁检测：innodb_deadlock_detect设置为on，开启死锁检测逻辑</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2025/11/11/MySQL/" data-id="cmi3zojeb0001m0ti9ulthnpv" data-title="mysql" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%BB%E9%A2%98%E5%90%8D/" rel="tag">主题名</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-八股学习" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" class="article-date">
@@ -987,7 +1642,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" data-id="cmi3za0wh0001ywtidw8g0g5o" data-title="java-bagu" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/" data-id="cmi3zojec0002m0ti69yjh0dd" data-title="java-bagu" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1040,7 +1695,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/10/hello-world/" data-id="cmi3za0we0000ywti7k1pbf1d" data-title="zbc的笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/10/hello-world/" data-id="cmi3zoje40000m0ti1zdpeo4x" data-title="zbc的笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1102,6 +1757,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2025/11/11/MySQL/">mysql</a>
+          </li>
         
           <li>
             <a href="/2025/11/11/%E5%85%AB%E8%82%A1%E5%AD%A6%E4%B9%A0/">java-bagu</a>
