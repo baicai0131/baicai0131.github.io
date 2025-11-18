@@ -6,33 +6,34 @@
   
   <title>mysql | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+  <meta name="description" content="MySQL先从MySQL的基础结构开始： MySQL分为连接层，服务层存储引擎层 连接层：负责进行权限的校验，对用户信息进行身份认证 服务层：负责SQL的解析、优化、缓存及跨存储引擎功能的实现，分别由分析器，优化器，和执行器分别完成这些功能 存储引擎层：用于数据的存储和提取，采用插件式架构 由此我们可以看到一条SQL语句的执行过程  由连接层进行权限校验 进入服务层，服务层的分析器对SQL进行语法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql">
 <meta property="og:url" content="http://example.com/2025/11/11/MySQL/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:description" content="MySQL先从MySQL的基础结构开始： MySQL分为连接层，服务层存储引擎层 连接层：负责进行权限的校验，对用户信息进行身份认证 服务层：负责SQL的解析、优化、缓存及跨存储引擎功能的实现，分别由分析器，优化器，和执行器分别完成这些功能 存储引擎层：用于数据的存储和提取，采用插件式架构 由此我们可以看到一条SQL语句的执行过程  由连接层进行权限校验 进入服务层，服务层的分析器对SQL进行语法">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251112154705437.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251112154751111.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251115095150186.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251115101856347-1763433086334-1.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251115102601800-1763433086334-2.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251116083429874.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251116090047238.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251116091458336.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251117102927774.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251118083500240.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251118084526599.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251118092246116.png">
-<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251118093838815.png">
+<meta property="og:image" content="d:\user\hexoBlog\pictures\image-20251031094810325.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251112154705437.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251112154751111.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251115095150186.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251115101856347-1763433086334-1.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251115102601800-1763433086334-2.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251116083429874.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251116090047238.png">
+<meta property="og:image" content="d:\user\hexoBlog\source\_posts\pictures\image-20251116091458336.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251117102927774.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251118083500240.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251118084526599.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251118092246116.png">
+<meta property="og:image" content="d:\user\hexoBlog\source_posts\pictures\image-20251118093838815.png">
 <meta property="article:published_time" content="2025-11-11T06:00:00.000Z">
-<meta property="article:modified_time" content="2025-11-18T03:03:12.114Z">
+<meta property="article:modified_time" content="2025-11-18T05:26:36.506Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="笔记">
 <meta property="article:tag" content="主题名">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="d:\user\hexoBlog\pictures\image-20251112154705437.png">
+<meta name="twitter:image" content="d:\user\hexoBlog\pictures\image-20251031094810325.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -115,7 +116,106 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># MySQL</span><br><span class="line"></span><br><span class="line">先从MySQL的基础结构开始：</span><br><span class="line"></span><br><span class="line">MySQL分为连接层，服务层存储引擎层</span><br><span class="line"></span><br><span class="line">连接层：负责进行权限的校验，对用户信息进行身份认证</span><br><span class="line"></span><br><span class="line">服务层：负责SQL的解析、优化、缓存及跨存储引擎功能的实现，分别由分析器，优化器，和执行器分别完成这些功能</span><br><span class="line"></span><br><span class="line">存储引擎层：用于数据的存储和提取，采用插件式架构</span><br><span class="line"></span><br><span class="line">由此我们可以看到一条SQL语句的执行过程</span><br><span class="line"></span><br><span class="line">1. 由连接层进行权限校验</span><br><span class="line">2. 进入服务层，服务层的分析器对SQL进行语法分析，词法分析</span><br><span class="line">3. 优化器选择合适的索引和表的连接顺序</span><br><span class="line">4. 最后server调用引擎层，查找数据，返回数据结果</span><br><span class="line"></span><br><span class="line">上面提到了MySQL的存储引擎采用插件式架构，那么存储引擎都有什么类型</span><br><span class="line"></span><br><span class="line">- InnoDB：MySQL的默认存储引擎，底层采用B+树的数据结构存储数据，支持事务，行级锁，和外键</span><br><span class="line">- MyISAM：不支持事务，外键，适用读取多更新少的数据库，底层也采用B+树，但是索引和数据分开存储，且在崩溃后不能安全恢复，无redo_log</span><br><span class="line">- Memory：将数据存储在内存中，提高查找速度</span><br><span class="line">- NDB：常用于分布式应用中</span><br><span class="line"></span><br><span class="line">![image-20251031094810325](D:\user\hexoBlog\pictures\image-20251031094810325.png)</span><br><span class="line"></span><br><span class="line">## 图解</span><br><span class="line"></span><br><span class="line">### 一条SQL语句的执行过程</span><br><span class="line"></span><br><span class="line">1. 连接器建立连接</span><br><span class="line">   - 和客户端TCP三次握手建立连接，和HTTP一样也有长连接和短连接的 概念。长连接会占用内存，为了解决这个问题， 可以定期断开长连接，或者客户端主动重置连接，通过mysql_reset_connection函数实现</span><br><span class="line">   - 校验客户端的用户名和密码，不对报错</span><br><span class="line">   - 对了，读取用户权限，后面的权限逻辑判断基于权限</span><br><span class="line">2. 查询缓存：因为数据库表的更新较为频繁，所以这个功能比较鸡肋，在mysql8后就移除了server层的查询缓存，但是Innodb存储引擎中的buffer pool还保留着</span><br><span class="line">3. 解析器：先词法分析，识别关键字（如select、from）等，然后语法分析，根据语法规则判断SQL语法是否正确</span><br><span class="line">4. 执行SQL：</span><br><span class="line">   - 预处理器：检查SQL查询语句中的表或者字段是否存在，将*扩展为表上的所有列</span><br><span class="line">   - 优化器：为SQL查询语句制定一个执行计划，将SQL语句的执行方案确定，主要就是决定采用什么索引，MySQL中可以使用explain加在查询SQL前查看使用了什么索引</span><br><span class="line">   - 执行器：执行器和存储引擎交互，执行SQL语句。</span><br><span class="line">     - 第一次查询，调用read_first_record函数指针指向的函数，把查询条件交给存储引擎，让存储引擎定位符合条件的第一天记录</span><br><span class="line">     - 执行器从存储引擎督导记录，判断是否符合条件，符合条件就发送给客户端，不符合跳过该记录</span><br><span class="line">     - 执行器查询的过程是while循环，再查一次，因为不是第一次查询，read_record函数指针指向一个永远返回-1的函数，调用该函数时，执行器退出循环，结束查询。</span><br><span class="line"></span><br><span class="line">**Total**：</span><br><span class="line"></span><br><span class="line">- 连接器：建立连接，管理连接，校验用户身份</span><br><span class="line">- 查询缓存：查询语句命中缓存直接返回，否则继续向下指向，mysql8后删除了该模块</span><br><span class="line">- 解析SQL：通过解析器对SQL查询语句进行词法分析、语法分析，构建语法树……</span><br><span class="line">- 执行SQL：</span><br><span class="line">  - 预处理阶段：检查表和字段是否存在，将* 扩展为表的所有列</span><br><span class="line">  - 优化阶段：选择最小的成本的执行计划</span><br><span class="line">  - 执行阶段：根据执行计划执行SQL查询语句，从存储引擎读取记录，返回给客户端。</span><br><span class="line"></span><br><span class="line">### MySQL一条记录的存储过程</span><br><span class="line"></span><br><span class="line">建立数据库database后，在/var/lib/mysql中建立一个以database为名的目录，表结构，表数据的文件都存储在这个目录中。</span><br><span class="line"></span><br><span class="line">db.opt：用来存储当前数据库的默认字符集和字符校验规则</span><br><span class="line"></span><br><span class="line">t_order.frm：t_order的表结构保存在这个文件，MySQL中会为每个表生成一个.frm文件，该文件用来存放每个表的元数据信息，主要是表结构的定义</span><br><span class="line"></span><br><span class="line">t_order.ibd：t_order的表数据保存在这个文件，表数据既可以存储在共享表空间文件里（文件名：ibdata1），也可以存储在单独表空间文件（文件名：表名字.ibd）由参数innodb_file_per_table控制，如果设置了其为1，会将存储的数据，索引等信息存储在一个独占表空间中，mysql5之后默认值为1，也就是每个表都有一个独立的.idb文件。</span><br><span class="line"></span><br><span class="line">#### 表空间文件的结构</span><br><span class="line"></span><br><span class="line">表空间组成：段，区，页，行组成。</span><br><span class="line"></span><br><span class="line">**1、行**：数据库表中的记录都按行进行存放，根据不同行格式有不同的存储结构</span><br><span class="line"></span><br><span class="line">**2、页**：InnoDB的数据按页为单位来读写，要读取某个一条记录时，不是将这行记录从磁盘中读出，而是以页为单位读出，每页16KB，所以数据库的每次读写都是以16KB为单位的。页有数据页，undo日志页，溢出页等类型，数据表中的是数据页来管理（详见https://xiaolincoding.com/mysql/index/page.html）</span><br><span class="line"></span><br><span class="line">**3、区**：区的存在是为了解决逻辑上相邻的两个页之间的物理位置并不连续而出现的，如果两个页之间的物理位置不连续，磁盘查询时会出现大量I/O，效率很低。</span><br><span class="line"></span><br><span class="line">为了避免随机IO，就可以在大数据量时，为索引分配空间时不再按照页为单位进行分配，而是按照区为单位进行分配，每个区的大小为1MB，对于16KB的页来说，会有连续的64个页被划分为一个区，这样链表中相邻的页物理位置页相邻了，使用顺序IO。</span><br><span class="line"></span><br><span class="line">**4、段**：多个区组成段，分为数据段，索引段，回滚段。</span><br><span class="line"></span><br><span class="line">- 索引段：存放B+树的非叶子节点的区的集合</span><br><span class="line">- 数据段：存放B+树的叶子节点的区的集合</span><br><span class="line">- 回滚段：存放的时回滚数据的区的结合，MVCC利用了回滚段实现多版本查询数据</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### InnoDB行格式有哪些</span><br><span class="line"></span><br><span class="line">- Redundant是一种古老的行格式已经不用了</span><br><span class="line"></span><br><span class="line">Compact、Dynamic、Compressed三种紧凑的行格式，MySQL5.7后默认使用Dynamic行格式。</span><br><span class="line"></span><br><span class="line">**COMPACT**的行格式：</span><br><span class="line"></span><br><span class="line">| 记录的额外信息 | 记录的真实数据 |</span><br><span class="line">| -------------- | -------------- |</span><br><span class="line"></span><br><span class="line">| 变长字段长度列表 | NULL值列表 | 记录头信息 | \|\|\|\|\|\|\|\| | row_id | trx_id | roll_ptr | 列1值 | 列2值 | 列n值 |</span><br><span class="line">| ---------------- | ---------- | ---------- | ---------------- | ------ | ------ | -------- | ----- | ----- | ----- |</span><br><span class="line"></span><br><span class="line">记录的额外信息：变长字段长度列表，NULL值列表，记录头信息</span><br><span class="line"></span><br><span class="line">变长字段实际存储的数据的长度不固定，在存储数据时，也把数据占用的大小存起来，读取数据的时候根据这个[变长字段长度列表]去读取对应长度的数据，varchar、TEXT、BLOB等变长字段也是这么实现的</span><br><span class="line"></span><br><span class="line">```mysql</span><br><span class="line">create table &#x27;t_user&#x27;(</span><br><span class="line">	&#x27;id&#x27; int(11) not null,</span><br><span class="line">    &#x27;name&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;phone&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;age&#x27; int(11) default null,</span><br><span class="line">    primary key(&#x27;id&#x27;) using btree</span><br><span class="line"> )engine = innodb default character set = ascii row_format = compact</span><br></pre></td></tr></table></figure>
+        <h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><p>先从MySQL的基础结构开始：</p>
+<p>MySQL分为连接层，服务层存储引擎层</p>
+<p>连接层：负责进行权限的校验，对用户信息进行身份认证</p>
+<p>服务层：负责SQL的解析、优化、缓存及跨存储引擎功能的实现，分别由分析器，优化器，和执行器分别完成这些功能</p>
+<p>存储引擎层：用于数据的存储和提取，采用插件式架构</p>
+<p>由此我们可以看到一条SQL语句的执行过程</p>
+<ol>
+<li>由连接层进行权限校验</li>
+<li>进入服务层，服务层的分析器对SQL进行语法分析，词法分析</li>
+<li>优化器选择合适的索引和表的连接顺序</li>
+<li>最后server调用引擎层，查找数据，返回数据结果</li>
+</ol>
+<p>上面提到了MySQL的存储引擎采用插件式架构，那么存储引擎都有什么类型</p>
+<ul>
+<li>InnoDB：MySQL的默认存储引擎，底层采用B+树的数据结构存储数据，支持事务，行级锁，和外键</li>
+<li>MyISAM：不支持事务，外键，适用读取多更新少的数据库，底层也采用B+树，但是索引和数据分开存储，且在崩溃后不能安全恢复，无redo_log</li>
+<li>Memory：将数据存储在内存中，提高查找速度</li>
+<li>NDB：常用于分布式应用中</li>
+</ul>
+<p><img src="D:\user\hexoBlog\pictures\image-20251031094810325.png" alt="image-20251031094810325"></p>
+<h2 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h2><h3 id="一条SQL语句的执行过程"><a href="#一条SQL语句的执行过程" class="headerlink" title="一条SQL语句的执行过程"></a>一条SQL语句的执行过程</h3><ol>
+<li>连接器建立连接<ul>
+<li>和客户端TCP三次握手建立连接，和HTTP一样也有长连接和短连接的 概念。长连接会占用内存，为了解决这个问题， 可以定期断开长连接，或者客户端主动重置连接，通过mysql_reset_connection函数实现</li>
+<li>校验客户端的用户名和密码，不对报错</li>
+<li>对了，读取用户权限，后面的权限逻辑判断基于权限</li>
+</ul>
+</li>
+<li>查询缓存：因为数据库表的更新较为频繁，所以这个功能比较鸡肋，在mysql8后就移除了server层的查询缓存，但是Innodb存储引擎中的buffer pool还保留着</li>
+<li>解析器：先词法分析，识别关键字（如select、from）等，然后语法分析，根据语法规则判断SQL语法是否正确</li>
+<li>执行SQL：<ul>
+<li>预处理器：检查SQL查询语句中的表或者字段是否存在，将*扩展为表上的所有列</li>
+<li>优化器：为SQL查询语句制定一个执行计划，将SQL语句的执行方案确定，主要就是决定采用什么索引，MySQL中可以使用explain加在查询SQL前查看使用了什么索引</li>
+<li>执行器：执行器和存储引擎交互，执行SQL语句。<ul>
+<li>第一次查询，调用read_first_record函数指针指向的函数，把查询条件交给存储引擎，让存储引擎定位符合条件的第一天记录</li>
+<li>执行器从存储引擎督导记录，判断是否符合条件，符合条件就发送给客户端，不符合跳过该记录</li>
+<li>执行器查询的过程是while循环，再查一次，因为不是第一次查询，read_record函数指针指向一个永远返回-1的函数，调用该函数时，执行器退出循环，结束查询。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Total</strong>：</p>
+<ul>
+<li>连接器：建立连接，管理连接，校验用户身份</li>
+<li>查询缓存：查询语句命中缓存直接返回，否则继续向下指向，mysql8后删除了该模块</li>
+<li>解析SQL：通过解析器对SQL查询语句进行词法分析、语法分析，构建语法树……</li>
+<li>执行SQL：<ul>
+<li>预处理阶段：检查表和字段是否存在，将* 扩展为表的所有列</li>
+<li>优化阶段：选择最小的成本的执行计划</li>
+<li>执行阶段：根据执行计划执行SQL查询语句，从存储引擎读取记录，返回给客户端。</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL一条记录的存储过程"><a href="#MySQL一条记录的存储过程" class="headerlink" title="MySQL一条记录的存储过程"></a>MySQL一条记录的存储过程</h3><p>建立数据库database后，在&#x2F;var&#x2F;lib&#x2F;mysql中建立一个以database为名的目录，表结构，表数据的文件都存储在这个目录中。</p>
+<p>db.opt：用来存储当前数据库的默认字符集和字符校验规则</p>
+<p>t_order.frm：t_order的表结构保存在这个文件，MySQL中会为每个表生成一个.frm文件，该文件用来存放每个表的元数据信息，主要是表结构的定义</p>
+<p>t_order.ibd：t_order的表数据保存在这个文件，表数据既可以存储在共享表空间文件里（文件名：ibdata1），也可以存储在单独表空间文件（文件名：表名字.ibd）由参数innodb_file_per_table控制，如果设置了其为1，会将存储的数据，索引等信息存储在一个独占表空间中，mysql5之后默认值为1，也就是每个表都有一个独立的.idb文件。</p>
+<h4 id="表空间文件的结构"><a href="#表空间文件的结构" class="headerlink" title="表空间文件的结构"></a>表空间文件的结构</h4><p>表空间组成：段，区，页，行组成。</p>
+<p><strong>1、行</strong>：数据库表中的记录都按行进行存放，根据不同行格式有不同的存储结构</p>
+<p><strong>2、页</strong>：InnoDB的数据按页为单位来读写，要读取某个一条记录时，不是将这行记录从磁盘中读出，而是以页为单位读出，每页16KB，所以数据库的每次读写都是以16KB为单位的。页有数据页，undo日志页，溢出页等类型，数据表中的是数据页来管理（详见<a target="_blank" rel="noopener" href="https://xiaolincoding.com/mysql/index/page.html%EF%BC%89">https://xiaolincoding.com/mysql/index/page.html）</a></p>
+<p><strong>3、区</strong>：区的存在是为了解决逻辑上相邻的两个页之间的物理位置并不连续而出现的，如果两个页之间的物理位置不连续，磁盘查询时会出现大量I&#x2F;O，效率很低。</p>
+<p>为了避免随机IO，就可以在大数据量时，为索引分配空间时不再按照页为单位进行分配，而是按照区为单位进行分配，每个区的大小为1MB，对于16KB的页来说，会有连续的64个页被划分为一个区，这样链表中相邻的页物理位置页相邻了，使用顺序IO。</p>
+<p><strong>4、段</strong>：多个区组成段，分为数据段，索引段，回滚段。</p>
+<ul>
+<li>索引段：存放B+树的非叶子节点的区的集合</li>
+<li>数据段：存放B+树的叶子节点的区的集合</li>
+<li>回滚段：存放的时回滚数据的区的结合，MVCC利用了回滚段实现多版本查询数据</li>
+</ul>
+<h4 id="InnoDB行格式有哪些"><a href="#InnoDB行格式有哪些" class="headerlink" title="InnoDB行格式有哪些"></a>InnoDB行格式有哪些</h4><ul>
+<li>Redundant是一种古老的行格式已经不用了</li>
+</ul>
+<p>Compact、Dynamic、Compressed三种紧凑的行格式，MySQL5.7后默认使用Dynamic行格式。</p>
+<p><strong>COMPACT</strong>的行格式：</p>
+<table>
+<thead>
+<tr>
+<th>记录的额外信息</th>
+<th>记录的真实数据</th>
+</tr>
+</thead>
+</table>
+<table>
+<thead>
+<tr>
+<th>变长字段长度列表</th>
+<th>NULL值列表</th>
+<th>记录头信息</th>
+<th>||||||||</th>
+<th>row_id</th>
+<th>trx_id</th>
+<th>roll_ptr</th>
+<th>列1值</th>
+<th>列2值</th>
+<th>列n值</th>
+</tr>
+</thead>
+</table>
+<p>记录的额外信息：变长字段长度列表，NULL值列表，记录头信息</p>
+<p>变长字段实际存储的数据的长度不固定，在存储数据时，也把数据占用的大小存起来，读取数据的时候根据这个[变长字段长度列表]去读取对应长度的数据，varchar、TEXT、BLOB等变长字段也是这么实现的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table &#x27;t_user&#x27;(</span><br><span class="line">	&#x27;id&#x27; int(11) not null,</span><br><span class="line">    &#x27;name&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;phone&#x27; varchar(20) default null,</span><br><span class="line">    &#x27;age&#x27; int(11) default null,</span><br><span class="line">    primary key(&#x27;id&#x27;) using btree</span><br><span class="line"> )engine = innodb default character set = ascii row_format = compact</span><br></pre></td></tr></table></figure>
 
 <p>对于：</p>
 <p>如 id &#x3D; 1 , name &#x3D; a , phone &#x3D; 123,age &#x3D; 18这样的记录</p>
@@ -215,8 +315,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from table where a&gt;=1 and b = 2;</span><br></pre></td></tr></table></figure>
 
 <p>这个和上面的查询语句只有在a的取值范围上有所差异，但是其实索引的利用情况是一样的，还是只用到了a的索引，很多其他的文档中都会说在符合a&gt;&#x3D;1的二级索引记录中，，b无序，但是在a&#x3D;1的二级索引记录范围内b是有序的，再通过b&#x3D;2条件减少需要扫描的二级索引记录范围，然后得出结论，a,b字段都用到了联合索引，但是我实际用了一遍，发现其实并没有，a的查询范围加不加等号实际效果是一样的。</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251112154705437.png" alt="image-20251112154705437"></p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251112154751111.png" alt="image-20251112154751111"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251112154705437.png" alt="image-20251112154705437"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251112154751111.png" alt="image-20251112154751111"></p>
 <h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> a<span class="operator">&gt;</span><span class="number">1</span> <span class="keyword">and</span> b <span class="operator">=</span><span class="number">2</span>;</span><br></pre></td></tr></table></figure>
 
 <p>这个查询语句只a用到了联合索引，当查询到了值后，还要判断b的值是否满足了条件，在mysql5.6之前这些操作要回表判断，在主键索引上依次找到对应的数据再进行判断，但是mysql5.6之后就可以在联合索引遍历过程中，对联合索引中包含的字段先走出判断，过滤不满足的条件，减少了回表的次数，如果在extra列中出现了Using index condition就说明用到了索引下推的优化。</p>
@@ -294,9 +394,9 @@
 <td>校验页是否完整</td>
 </tr>
 </tbody></table>
-<p><img src="D:\user\hexoBlog\pictures\image-20251115095150186.png" alt="image-20251115095150186"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251115095150186.png" alt="image-20251115095150186"></p>
 <p>数据页中的记录按照主键顺序组成单向链表，链表结构导致其插入删除方便但是检索效率低，所以有了一个页目录，页目录会中会存储指针，每个指针指向每页的最后一个行记录</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251115101856347-1763433086334-1.png" alt="image-20251115101856347"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251115101856347-1763433086334-1.png" alt="image-20251115101856347"></p>
 <p><strong>页目录创建过程</strong></p>
 <ol>
 <li>记录划分为几组，记录中包含最大记录和最小记录，不包含已删除记录</li>
@@ -310,7 +410,7 @@
 <li>剩下的分组的记录条数范围只能在4-8之间</li>
 </ul>
 <h3 id="B-树怎么进行查询"><a href="#B-树怎么进行查询" class="headerlink" title="B+树怎么进行查询"></a>B+树怎么进行查询</h3><p>B+树结构如下（这里我有点疑问，理论上B+树的非叶子节点间应该是没有双向指针的，我查资料也没找到这张图的出处，不知道为什么会有这张图，默认还是非叶子节点间没有指针指向）：</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251115102601800-1763433086334-2.png" alt="image-20251115102601800"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251115102601800-1763433086334-2.png" alt="image-20251115102601800"></p>
 <p>InnoDB的B+树中每个节点都是一个数据页，不同的是非叶子节点中的数据页是页目录类型，只有叶子节点才会存储具体数据，当要查询数据时，会通过层层二分来找到最终记录组， 然后再遍历记录组找到目标数据。</p>
 <p><strong>聚簇索引二级索引</strong></p>
 <p>聚簇索引的叶子节点存储实际数据，完整的用户记录都存放在聚簇索引的叶子节点，二级索引的叶子节点存储的是主键值，表的数据都存放在聚簇索引的叶子节点里，InnoDB存储引擎一定会为表创建一个聚簇索引（有主键，默认使用主键作为索引，没有主键选择第一个不含NULL值的唯一列作为聚簇索引的索引键，都没有，InnoDB自动生成一个隐式自增id列作为聚簇索引的索引键），有且只有一个，为了避免重复存储。</p>
@@ -392,7 +492,7 @@
 <li>start transaction with consistent snapshot：执行后马上启动事务。</li>
 </ul>
 <h4 id="Read-View在MVCC（多版本并发控制）中如何工作"><a href="#Read-View在MVCC（多版本并发控制）中如何工作" class="headerlink" title="Read View在MVCC（多版本并发控制）中如何工作"></a>Read View在MVCC（多版本并发控制）中如何工作</h4><p>ReadView组成:</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251116083429874.png" alt="image-20251116083429874"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251116083429874.png" alt="image-20251116083429874"></p>
 <p>根据之前的学习我们已经知道了InnoDB存储引擎中，聚簇索引记录中含有如下两个隐藏列：</p>
 <ul>
 <li>trx_id：记录最后一个对该记录进行修改的事务id</li>
@@ -409,7 +509,7 @@
 </li>
 </ul>
 <h5 id="为什么MVCC不能完全避免幻读现象"><a href="#为什么MVCC不能完全避免幻读现象" class="headerlink" title="为什么MVCC不能完全避免幻读现象"></a>为什么MVCC不能完全避免幻读现象</h5><p>我们刚才的例子中忽略了如果查询的记录是不存在的情况，如果现在事务A查询了一条不存在的事务，然后在这个期间，事务B向数据库中插入了这条新的事务，那么事务A就会执行update，把数据更新到数据库中，同时，这条记录的trx_id也就变成了A的事务id，然后再去查询时，这条数据就会变成可见的了，造成了幻读。</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251116090047238.png" alt="image-20251116090047238"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251116090047238.png" alt="image-20251116090047238"></p>
 <p>另外一个幻读常见：</p>
 <p>先快照读再执行当前读</p>
 <ul>
@@ -417,7 +517,7 @@
 <li>T2：事务B：insert into table values(200) commit</li>
 <li>T3：执行当前读：select * from table where id &gt; 100 for update得到了和T1时刻不同的数据数量</li>
 </ul>
-<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><img src="D:\user\hexoBlog\pictures\image-20251116091458336.png" alt="image-20251116091458336" style="zoom:200%;" />
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><img src="D:\user\hexoBlog\source\_posts\pictures\image-20251116091458336.png" alt="image-20251116091458336" style="zoom:200%;" />
 
 <h4 id="锁-1"><a href="#锁-1" class="headerlink" title="锁"></a>锁</h4><p>锁的类型分为</p>
 <ul>
@@ -559,7 +659,7 @@
 <p><strong>二级索引</strong></p>
 <p>在锁定读查询时，除了会对二级索引（如果二级索引是唯一索引，加锁规则和主键索引的加锁规则相同）项加行级锁，还会对相关主键也加[记录锁]</p>
 <p>ps：select * form performance_schema.data_locks可以查看事务执行SQL过程中加了什么锁</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251117102927774.png" alt="image-20251117102927774"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251117102927774.png" alt="image-20251117102927774"></p>
 <p>可以通过查看Lock_MODE来确定加的是什么锁。</p>
 <ul>
 <li>如果Lock_MODE是X：next-key锁</li>
@@ -679,8 +779,8 @@
 <p>非唯一索引等值查询时，能否插入新的值不仅要看二级索引的锁范围，还要看主键值。</p>
 <p>如果二级索引的next-key 锁是(20,24]，那有些时候，二级索引为20的值也可以插入，比如新的数据的主键id小于原来二级索引值为20的id，那这个新数据就不被包含在锁的范围内了。同理，24也是</p>
 <h4 id="非唯一索引范围查询"><a href="#非唯一索引范围查询" class="headerlink" title="非唯一索引范围查询"></a>非唯一索引范围查询</h4><p>非唯一索引和主键索引的范围查询的加锁也有所不同，不同之处在于非唯一索引范围查询，索引的 next-key lock 不会有退化为间隙锁和记录锁的情况，也就是非唯一索引进行范围查询时，对二级索引记录加锁都是加 next-key 锁。</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251118083500240.png" alt="image-20251118083500240"></p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251118084526599.png" alt="image-20251118084526599"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251118083500240.png" alt="image-20251118083500240"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251118084526599.png" alt="image-20251118084526599"></p>
 <h5 id="为什么update没加索引会锁全表"><a href="#为什么update没加索引会锁全表" class="headerlink" title="为什么update没加索引会锁全表"></a>为什么update没加索引会锁全表</h5><p>执行update语句时，会对记录加上独占锁，如果其他事务对持有独占锁的记录进行修改会被阻塞，InnoDB事务中，对记录加锁的基本单位是next-key锁，有时会退化为间隙锁或者记录锁。如果在update语句中where没有使用索引，相当于全表扫描，对所有记录都加上了next-key Lock，整个表都会被锁住，也就造成了整个表的阻塞。</p>
 <p><strong>避免：将sql_safe_updates的参数设置为1规定以下行为</strong></p>
 <ul>
@@ -696,7 +796,7 @@
 </li>
 </ul>
 <h4 id="MySQL死锁了怎么解决"><a href="#MySQL死锁了怎么解决" class="headerlink" title="MySQL死锁了怎么解决"></a>MySQL死锁了怎么解决</h4><h4 id="为什么会有死锁产生"><a href="#为什么会有死锁产生" class="headerlink" title="为什么会有死锁产生"></a>为什么会有死锁产生</h4><p>Innodb存储引擎为了解决可重复读隔离级别下的幻读问题，引出next-key锁。</p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251118092246116.png" alt="image-20251118092246116"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251118092246116.png" alt="image-20251118092246116"></p>
 <p>如上图中，事务A在二级索引上加的是X型的next-key锁，锁范围：(10086,+<strong><code>∞</code></strong>)</p>
 <p>事务B执行插入语句时，就会在插入间隙上获取插入意向锁，插入意向锁和间隙锁冲突，当其他事务持有该间隙的间隙锁时，要等其释放间隙锁才能获取插入意向锁，间隙锁又是兼容的，两个事务的select…… for update语句不会相互影响（这里是因为**<code>∞</code>**不是真实记录，不需要考虑X和S的关系，不然在for update阶段B就会因为获取不到锁阻塞了）。</p>
 <p><strong>什么是插入意向锁</strong></p>
@@ -715,7 +815,7 @@
 <li>unique二级索引重复，插入新记录的事务给已经存在的二级索引类重复的二级索引记录添加S型next-key锁。</li>
 </ul>
 <p><strong>执行相同Insert语句的场景</strong></p>
-<p><img src="D:\user\hexoBlog\pictures\image-20251118093838815.png" alt="image-20251118093838815"></p>
+<p><img src="D:\user\hexoBlog\source_posts\pictures\image-20251118093838815.png" alt="image-20251118093838815"></p>
 <ul>
 <li>A先插入10086的数据，插入成功，此时被隐式锁保护，没有实际锁结构</li>
 <li>B也插入10086数据，，二级索引遇到已经存在的二级唯一索引，B就会想获取一个S锁，A此时还未提交，A中的隐式锁会变成显示锁，X型记录锁，阻塞B的获取S锁，B进入阻塞状态</li>
@@ -730,7 +830,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2025/11/11/MySQL/" data-id="cmi3zojeb0001m0ti9ulthnpv" data-title="mysql" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2025/11/11/MySQL/" data-id="cmi44so110000tstibkjs9hh7" data-title="mysql" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
